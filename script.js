@@ -4,8 +4,18 @@ const cheerio = require('cheerio');
 const searchInput = document.getElementById("searchInput");
 const searchButton = document.getElementById("searchButton");
 const resultsDiv = document.getElementById("results");
+const logDiv = document.getElementById("log");
+
+function logMessage(message) {
+    const logEntry = document.createElement('p');
+    logEntry.textContent = message;
+    logDiv.appendChild(logEntry);
+    logDiv.scrollTop = logDiv.scrollHeight; 
+}
 
 async function scrapeTrendyol(searchTerm) {
+    logMessage(`Trendyol'da "${searchTerm}" aranıyor...`);
+
     const response = await fetch(`https://www.trendyol.com/sr?q=${searchTerm}`);
     const html = await response.text();
 
@@ -24,6 +34,7 @@ async function scrapeTrendyol(searchTerm) {
         });
     });
 
+    logMessage(`${products.length} ürün bulundu.`);
     return products;
 }
 
@@ -36,6 +47,7 @@ searchButton.addEventListener("click", async () => {
         displayResults("Trendyol", trendyolProducts);
     } catch (error) {
         console.error("Trendyol'dan veri çekerken hata oluştu:", error);
+        logMessage(`Hata: ${error.message}`);
         resultsDiv.innerHTML = "<p>Ürünler yüklenirken bir hata oluştu.</p>";
     }
 });
@@ -43,6 +55,7 @@ searchButton.addEventListener("click", async () => {
 function displayResults(store, data) {
     for (const product of data) {
         const productElement = document.createElement('div');
+        productElement.classList.add('product');
         productElement.innerHTML = `
             <h3>${product.title}</h3>
             <p>${product.price}</p>
@@ -51,32 +64,3 @@ function displayResults(store, data) {
         resultsDiv.appendChild(productElement);
     }
 }
-
-const logDiv = document.getElementById("log");
-
-function logMessage(message) {
-    const logEntry = document.createElement('p');
-    logEntry.textContent = message;
-    logDiv.appendChild(logEntry);
-    logDiv.scrollTop = logDiv.scrollHeight; // En alta kaydır
-}
-
-async function scrapeTrendyol(searchTerm) {
-    logMessage(`Trendyol'da "${searchTerm}" aranıyor...`);
-    // ... (veri çekme işlemleri) ...
-    logMessage(`${products.length} ürün bulundu.`);
-    return products;
-}
-
-searchButton.addEventListener("click", async () => {
-    // ... (diğer kodlar) ...
-
-    try {
-        const trendyolProducts = await scrapeTrendyol(searchTerm);
-        displayResults("Trendyol", trendyolProducts);
-    } catch (error) {
-        console.error("Trendyol'dan veri çekerken hata oluştu:", error);
-        logMessage(`Hata: ${error.message}`);
-        resultsDiv.innerHTML = "<p>Ürünler yüklenirken bir hata oluştu.</p>";
-    }
-});
