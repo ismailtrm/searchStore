@@ -1,0 +1,29 @@
+/* Genel stiller */
+body {
+    font-family: sans-serif;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto; /* Ortala */
+}
+
+/* Arama çubuğu ve butonu stilleri */
+#searchInput {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+#searchButton {
+    padding: 10px 20px;
+    background-color: #4CAF50; /* Örnek renk */
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* Sonuçlar alanı stilleri */
+#results {
+    margin-top: 20px;
+}
