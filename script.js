@@ -13,6 +13,12 @@ function logMessage(message) {
     logDiv.scrollTop = logDiv.scrollHeight; 
 }
 
+
+const myArray = searchInput.split(" ");
+
+document.getElementById("demo").innerHTML = myArray; 
+
+
 async function scrapeTrendyol(searchTerm) {
     logMessage(`Trendyol'da "${searchTerm}" aranıyor...`);
 
