@@ -26,8 +26,24 @@ body {
 /* Sonuçlar alanı stilleri */
 #results {
     margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
+.product {
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: calc(33.33% - 20px);
+    box-sizing: border-box;
+}
+
+.product img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Log alanı stilleri */
 #log {
     margin-top: 20px;
     border: 1px solid #ccc;
