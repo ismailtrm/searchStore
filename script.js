@@ -1,69 +1,54 @@
-const fetch = require('node-fetch');
+const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
 
-const searchInput = document.getElementById("searchInput");
-const searchButton = document.getElementById("searchButton");
-const resultsDiv = document.getElementById("results");
-const logDiv = document.getElementById("log");
-
-function logMessage(message) {
-    const logEntry = document.createElement('p');
-    logEntry.textContent = message;
-    logDiv.appendChild(logEntry);
-    logDiv.scrollTop = logDiv.scrollHeight; 
-}
-
-
-let myArray = searchInput.split(" ");
-
-async function scrapeTrendyol(searchTerm) {
-    logMessage(`Trendyol'da "${myArray}" aranıyor...`);
-
-    const response = await fetch(`https://www.trendyol.com/sr?q=${myArray}`);
-    const html = await response.text();
-
-    const $ = cheerio.load(html);
-    const products = [];
-
-    $('.p-card-wrppr').each((index, element) => {
-        const productTitle = $(element).find('.prdct-desc-cntnr-name').text().trim();
-        const productPrice = $(element).find('.prc-box-dscntd').text().trim();
-        const productImage = $(element).find('.p-card-img img').attr('src');
-
-        products.push({
-            title: productTitle,
-            price: productPrice,
-            image: productImage
-        });
-    });
-
-    logMessage(`${products.length} ürün bulundu.`);
-    return products;
-}
-
-searchButton.addEventListener("click", async () => {
-    const searchTerm = searchInput.value;
-    resultsDiv.innerHTML = ""; 
+async function searchAndScrape(searchTerm) {
+    const browser = await puppeteer.launch({ headless: false }); // Non-headless for debugging
+    const page = await browser.newPage();
+    await page.goto('https://www.trendyol.com');
+    console.log("Navigated to Trendyol");
 
     try {
-        const trendyolProducts = await scrapeTrendyol(myArray);
-        displayResults("Trendyol", trendyolProducts);
-    } catch (error) {
-        console.error("Trendyol'dan veri çekerken hata oluştu:", error);
-        logMessage(`Hata: ${error.message}`);
-        resultsDiv.innerHTML = "<p>Ürünler yüklenirken bir hata oluştu.</p>";
-    }
-});
+        await page.waitForSelector('#search-input', { timeout: 5000 }); // Wait for search input
+        await page.type('#search-input', searchTerm);
 
-function displayResults(store, data) {
-    for (const product of data) {
-        const productElement = document.createElement('div');
-        productElement.classList.add('product');
-        productElement.innerHTML = `
-            <h3>${product.title}</h3>
-            <p>${product.price}</p>
-            <img src="${product.image}" alt="${product.title}">
-        `;
-        resultsDiv.appendChild(productElement);
+        await Promise.all([
+            page.waitForNavigation(), // Wait for navigation after clicking search
+            page.click('.search-button')
+        ]);
+        console.log("Clicked search button");
+
+        await page.waitForSelector('.p-card-wrppr', { timeout: 10000 }); // Wait for results
+        console.log("Results loaded");
+
+        const html = await page.content();
+        const $ = cheerio.load(html);
+        const products = [];
+
+        $('.p-card-wrppr').each((index, element) => {
+            const productTitleElement = $(element).find('.prdct-desc-cntnr-name a');
+            const productTitle = productTitleElement.text().trim();
+            const productUrl = productTitleElement.attr('href');
+            const productPrice = $(element).find('.prc-box-dscntd').text().trim();
+            const productImage = $(element).find('.p-card-img img').attr('src');
+
+            if (productTitle && productPrice && productImage && productUrl) {
+                products.push({
+                    title: productTitle,
+                    price: productPrice,
+                    image: productImage,
+                    url: 'https://www.trendyol.com' + productUrl 
+                });
+            }
+        });
+
+        console.log("Scraped products:");
+        console.log(products);
+    } catch (error) {
+        console.error("An error occurred during scraping:", error);
+    } finally {
+        await browser.close();
     }
 }
+
+const searchTerm = 'siyah etek'; 
+searchAndScrape(searchTerm);
