@@ -51,3 +51,32 @@ function displayResults(store, data) {
         resultsDiv.appendChild(productElement);
     }
 }
+
+const logDiv = document.getElementById("log");
+
+function logMessage(message) {
+    const logEntry = document.createElement('p');
+    logEntry.textContent = message;
+    logDiv.appendChild(logEntry);
+    logDiv.scrollTop = logDiv.scrollHeight; // En alta kaydır
+}
+
+async function scrapeTrendyol(searchTerm) {
+    logMessage(`Trendyol'da "${searchTerm}" aranıyor...`);
+    // ... (veri çekme işlemleri) ...
+    logMessage(`${products.length} ürün bulundu.`);
+    return products;
+}
+
+searchButton.addEventListener("click", async () => {
+    // ... (diğer kodlar) ...
+
+    try {
+        const trendyolProducts = await scrapeTrendyol(searchTerm);
+        displayResults("Trendyol", trendyolProducts);
+    } catch (error) {
+        console.error("Trendyol'dan veri çekerken hata oluştu:", error);
+        logMessage(`Hata: ${error.message}`);
+        resultsDiv.innerHTML = "<p>Ürünler yüklenirken bir hata oluştu.</p>";
+    }
+});
