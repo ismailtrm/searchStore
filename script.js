@@ -1,3 +1,4 @@
+const fetch = require('node-fetch');
 const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
 
