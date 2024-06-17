@@ -1,18 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
-    <title>Online Ürün Toplayıcı</title>
-    <link rel="stylesheet" href="style.css"> </head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ürün Toplayıcı</title>
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
-    <div class="container">
+    <header>
         <h1>Online Ürün Toplayıcı</h1>
-
-        <input type="text" id="searchInput" placeholder="Örneğin: siyah etek">
-        <button id="searchButton">Ara</button>
-
-        <div id="log"></div> <div id="results"></div>
-    </div>
-
+        <input type="text" id="search-query" placeholder="Ürün ara...">
+        <button id="search-button">Ara</button>
+    </header>
+    <main>
+        <section id="results"></section>
+    </main>
+    <footer>
+        <p>© 2024 Ürün Toplayıcı. Tüm hakları saklıdır.</p>
+    </footer>
     <script src="script.js"></script>
 </body>
 </html>
