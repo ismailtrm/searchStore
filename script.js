@@ -14,15 +14,12 @@ function logMessage(message) {
 }
 
 
-const myArray = searchInput.split(" ");
-
-document.getElementById("log").innerHTML = myArray; 
-
+let myArray = searchInput.split(" ");
 
 async function scrapeTrendyol(searchTerm) {
-    logMessage(`Trendyol'da "${searchTerm}" aranıyor...`);
+    logMessage(`Trendyol'da "${myArray}" aranıyor...`);
 
-    const response = await fetch(`https://www.trendyol.com/sr?q=${searchTerm}`);
+    const response = await fetch(`https://www.trendyol.com/sr?q=${myArray}`);
     const html = await response.text();
 
     const $ = cheerio.load(html);
@@ -49,7 +46,7 @@ searchButton.addEventListener("click", async () => {
     resultsDiv.innerHTML = ""; 
 
     try {
-        const trendyolProducts = await scrapeTrendyol(searchTerm);
+        const trendyolProducts = await scrapeTrendyol(myArray);
         displayResults("Trendyol", trendyolProducts);
     } catch (error) {
         console.error("Trendyol'dan veri çekerken hata oluştu:", error);
