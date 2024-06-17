@@ -1,25 +1,13 @@
+const fetch = require('node-fetch');
+const cheerio = require('cheerio');
+
 const searchInput = document.getElementById("searchInput");
 const searchButton = document.getElementById("searchButton");
 const resultsDiv = document.getElementById("results");
 
-searchButton.addEventListener("click", () => {
-    const searchTerm = searchInput.value;
-    // TODO: Burada mağazalardan veri çekme işlemleri yapılacak
-    // Verileri çektikten sonra resultsDiv içine sonuçlar eklenecek
-});
-
-const puppeteer = require('puppeteer');
-const cheerio = require('cheerio');
-
 async function scrapeTrendyol(searchTerm) {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-
-    await page.goto(`https://www.trendyol.com/sr?q=${searchTerm}`);
-    await page.waitForSelector('.p-card-wrppr'); // Ürünlerin yüklenmesini bekle
-
-    const html = await page.content();
-    await browser.close();
+    const response = await fetch(`https://www.trendyol.com/sr?q=${searchTerm}`);
+    const html = await response.text();
 
     const $ = cheerio.load(html);
     const products = [];
@@ -39,17 +27,20 @@ async function scrapeTrendyol(searchTerm) {
     return products;
 }
 
-
 searchButton.addEventListener("click", async () => {
     const searchTerm = searchInput.value;
     resultsDiv.innerHTML = ""; 
 
-    const trendyolProducts = await scrapeTrendyol(searchTerm);
-    displayResults("Trendyol", trendyolProducts); // Trendyol sonuçlarını göster
+    try {
+        const trendyolProducts = await scrapeTrendyol(searchTerm);
+        displayResults("Trendyol", trendyolProducts);
+    } catch (error) {
+        console.error("Trendyol'dan veri çekerken hata oluştu:", error);
+        resultsDiv.innerHTML = "<p>Ürünler yüklenirken bir hata oluştu.</p>";
+    }
 });
 
 function displayResults(store, data) {
-    // TODO: Bu fonksiyonu, gelen verilere göre ürünleri listeleyecek şekilde tamamlayın
     for (const product of data) {
         const productElement = document.createElement('div');
         productElement.innerHTML = `
