@@ -16,7 +16,7 @@ function logMessage(message) {
 
 const myArray = searchInput.split(" ");
 
-document.getElementById("demo").innerHTML = myArray; 
+document.getElementById("log").innerHTML = myArray; 
 
 
 async function scrapeTrendyol(searchTerm) {
