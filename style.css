@@ -27,3 +27,11 @@ body {
 #results {
     margin-top: 20px;
 }
+
+#log {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    height: 200px; /* Örnek yükseklik */
+    overflow-y: scroll; /* Kaydırma çubuğu ekler */
+}
