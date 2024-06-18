@@ -26,16 +26,16 @@ fetch(proxyUrl + url, {
     const scriptRegex = /<script type="application\/javascript">([\s\S]*?)<\/script>/;
     const match = html.match(scriptRegex);
     if (match && match[1]) {
-                    // <script> içeriği bulundu, şimdi bunu gösterelim
-                    const scriptContent = match[1];
-                    const veri = JSON.parse(scriptContent);
-                    const contentSection = document.getElementById('content-section');
-                    console.log(`${veri.products}`);
-                    resultsSection.innerHTML = `
+        // <script> içeriği bulundu, şimdi bunu gösterelim
+        const scriptContent = match[1];
+        const veri = JSON.parse(scriptContent);
+        const contentSection = document.getElementById('content-section');
+        console.log(`${veri.products}`);
+        resultsSection.innerHTML = `
                     <div>
                     <p>${veri.products}</p>
                     </div>
-                                                `;
+                                    `;
         } else {
         resultsSection.innerHTML = '<p>Belirtilen <script> içeriği bulunamadı.</p>';
     }});
