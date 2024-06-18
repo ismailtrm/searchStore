@@ -8,9 +8,9 @@ document.addEventListener('DOMContentLoaded', function() {
     searchButton.addEventListener('click', function() {
         const query = searchQuery.value;
         if (query.trim() !== "") {
-            const url = `https://www.trendyol.com/sr?q=${query}`;
+            const url = `https://www.example.com/search?q=${encodeURIComponent(query)}`;
             
-fetch(proxyUrl + encodeURIComponent(url), {
+fetch(proxyUrl + url, {
     headers: {
         'Origin': 'https://search-store.vercel.app/', // Replace with your actual domain
         // 'X-Requested-With': 'XMLHttpRequest' // Uncomment if needed
