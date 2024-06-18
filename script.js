@@ -38,7 +38,7 @@ fetch(proxyUrl + url, {
                                     `;
         } else {
         resultsSection.innerHTML = '<p>Belirtilen <script> içeriği bulunamadı.</p>';
-    }});
+    }})
 .catch(error => {
     console.error('There was a problem with the fetch operation:', error);
     resultsSection.innerHTML = '<p>An error occurred while fetching data. Please try again later.</p>';
