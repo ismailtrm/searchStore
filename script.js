@@ -2,7 +2,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchButton = document.getElementById('search-button');
     const searchQuery = document.getElementById('search-query');
     const resultsSection = document.getElementById('results');
-
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    
     searchButton.addEventListener('click', function() {
         const query = searchQuery.value;
         if (query.trim() !== "") {
