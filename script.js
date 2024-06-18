@@ -18,3 +18,33 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// Fetch the URL
+fetch(`${url}`)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok ' + response.statusText);
+    }
+    return response.text();
+  })
+  .then(html => {
+    // Parse the HTML content using DOMParser
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    
+    // Select the section where the content will be inserted
+    const contentSection = document.getElementById('content-section');
+    
+    // Clear existing content if any
+    contentSection.innerHTML = '';
+
+    // Append the new content
+    contentSection.appendChild(doc.body);
+
+    // Optionally, log the title of the fetched page
+    const title = doc.querySelector('title').innerText;
+    console.log('Fetched page title:', title);
+  })
+  .catch(error => {
+    console.error('There was a problem with the fetch operation:', error);
+  });
