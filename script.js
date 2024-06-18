@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     searchButton.addEventListener('click', function() {
         const query = searchQuery.value;
         if (query.trim() !== "") {
-            const url = `https://www.example.com/search?q=${encodeURIComponent(query)}`;
+            const url = `https://www.trendyol.com/sr?q=${encodeURIComponent(query)}`;
             
 fetch(proxyUrl + url, {
     headers: {
