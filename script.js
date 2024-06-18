@@ -19,6 +19,12 @@ fetch(proxyUrl + encodeURIComponent(url))
     .then(html => {
         const contentSection = document.getElementById('content-section');
         contentSection.innerHTML = html;
+        resultsSection.innerHTML = `
+            <div>
+                <h2>Trendyol</h2>
+                <p><a href="${url}" target="_blank">Arama Sonuçları</a></p>
+            </div>
+        `;
     })
     .catch(error => {
         console.error('There was a problem with the fetch operation:', error);
