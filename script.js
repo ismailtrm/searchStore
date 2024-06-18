@@ -12,14 +12,15 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!response.ok) {
           throw new Error('Network response was not ok ' + response.statusText);
         }
-        return response.text();
+        return response.json();
       })
-      .then(html => {
-        // Select the section where the content will be inserted
+      .then(data => {
+        // İçeriği seçilen bölüme ekleme
         const contentSection = document.getElementById('content-section');
-        
-        // Insert the fetched HTML content directly
-        contentSection.innerHTML = html;
+        contentSection.innerHTML = `
+          <h2>${data.title}</h2>
+          <p>${data.body}</p>
+        `;
       })
       .catch(error => {
         console.error('There was a problem with the fetch operation:', error);
