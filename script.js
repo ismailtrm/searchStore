@@ -30,9 +30,9 @@ fetch(proxyUrl + url, {
                     const scriptContent = match[1];
                     const veri = JSON.parse(scriptContent);
                     const contentSection = document.getElementById('content-section');
+                    console.log(`${veri.products}`);
                     resultsSection.innerHTML = `
                     <div>
-                    <h2>Trendyol</h2>
                     <p>${veri.products}</p>
                     </div>
                                                 `;
