@@ -23,6 +23,20 @@ fetch(proxyUrl + url, {
     return response.text();
 })
 .then(html => {
+    const scriptRegex = /<script type="application\/javascript">([\s\S]*?)<\/script>/;
+    const match = html.match(scriptRegex);
+    if (match && match[1]) {
+                    // <script> içeriği bulundu, şimdi bunu gösterelim
+                    const scriptContent = match[1];
+                    const veri = JSON.parse(scriptContent);
+                    const contentSection = document.getElementById('content-section');
+                    resultsSection.innerHTML = `
+                    <div>
+                    <h2>Trendyol</h2>
+                    <p>${veri.products}</p>
+                    </div>
+                                                `;
+```
     const contentSection = document.getElementById('content-section');
     contentSection.innerHTML = html;
     resultsSection.innerHTML = `
@@ -32,6 +46,7 @@ fetch(proxyUrl + url, {
         </div>
     `;
 })
+```
 .catch(error => {
     console.error('There was a problem with the fetch operation:', error);
     resultsSection.innerHTML = '<p>An error occurred while fetching data. Please try again later.</p>';
