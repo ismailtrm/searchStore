@@ -9,21 +9,21 @@ document.addEventListener('DOMContentLoaded', function() {
         const query = searchQuery.value;
         if (query.trim() !== "") {
             const url = `https://www.trendyol.com/sr?q=${query}`;
-            fetch(proxyUrl + encodeURIComponent(url))
-            .then(response => {
-              if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-              }
-                console.log(response) 
-              return response.text();
-            })
-            .then(html => {
-              const contentSection = document.getElementById('content-section');
-              contentSection.innerHTML = html;
-            })
-            .catch(error => {
-              console.error('There was a problem with the fetch operation:', error);
-            });
+fetch(proxyUrl + encodeURIComponent(url))
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.text();
+    })
+    .then(html => {
+        const contentSection = document.getElementById('content-section');
+        contentSection.innerHTML = html;
+    })
+    .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+        resultsSection.innerHTML = '<p>An error occurred while fetching data. Please try again later.</p>';
+    });
             resultsSection.innerHTML = `
                 <div>
                     <h2>Trendyol</h2>
