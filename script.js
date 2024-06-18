@@ -35,6 +35,7 @@ fetch(proxyUrl + encodeURIComponent(url), {
 .catch(error => {
     console.error('There was a problem with the fetch operation:', error);
     resultsSection.innerHTML = '<p>An error occurred while fetching data. Please try again later.</p>';
+    console.log(proxyUrl + encodeURIComponent(url))
 });
             
             resultsSection.innerHTML = `
