@@ -28,9 +28,10 @@ fetch(proxyUrl + url, {
     if (match && match[1]) {
         // <script> içeriği bulundu, şimdi bunu gösterelim
         const scriptContent = match[1];
-        const veri = JSON.parse(scriptContent);
+        const veri = JSON.parse(${scriptContent});
+        console.log(${scriptContent});
         const contentSection = document.getElementById('content-section');
-        console.log(`${veri.products}`);
+        console.log(${veri.products});
         resultsSection.innerHTML = `
                     <div>
                     <p>${veri.products}</p>
