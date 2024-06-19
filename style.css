@@ -24,10 +24,10 @@ main {
     padding: 20px;
 }
 
-.grid-container {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px; /* Space between grid items */
+.column-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between items */
     padding: 20px;
 }
 
