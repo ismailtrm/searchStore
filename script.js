@@ -126,10 +126,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function fetchBershkaData(query) {
         const url = `https://www.bershka.com/tr/q/${encodeURIComponent(query)}`;
-        
+        var userAgent = navigator.userAgent;
+
         fetch(proxyUrl + url, {
             headers: {
-                'Origin': 'https://search-store.vercel.app/'
+                'Origin': 'https://search-store.vercel.app/',
+                'User-Agent': `${userAgent}`
             }
         })
         .then(response => {
