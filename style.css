@@ -44,18 +44,33 @@ footer {
     bottom: 0;
 }
 
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px; /* Optional: space between grid items */
+}
+
+.product {
+    border: 1px solid #ddd; /* Optional: border for each product */
+    padding: 10px; /* Optional: padding for each product */
+}
+
 #image-slider {
     position: relative;
     width: 100%;
     overflow: hidden;
+    height: 200px; /* Adjust the height as needed */
 }
 
 #image-slider img {
     width: 100%;
-    display: none; /* Görselleri gizli yapıyoruz */
+    display: none; /* Hide images initially */
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 #image-slider img.active {
-    display: block; /* Aktif görseli gösteriyoruz */
+    display: block; /* Show the active image */
 }
 
