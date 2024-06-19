@@ -31,50 +31,53 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.log(jsonString);
                     const data = JSON.parse(jsonString);
                     
-                    // İlk ürünü seçiyoruz
-                    const product = data.products[0];
+                    resultsSection.innerHTML = ''; // Clear previous results
 
-                    const siteUrl = 'https://www.trendyol.com';
-                    const productUrl = `${siteUrl}${product.url}`;
-                    console.log(`ProductUrl is: ${productUrl}`);
+                    data.products.forEach((product, index) => {
+                        const siteUrl = 'https://www.trendyol.com';
+                        const productUrl = `${siteUrl}${product.url}`;
+                        const imgSrcUrl = 'https://cdn.dsmcdn.com';
 
-                    const imgSrcUrl = 'https://cdn.dsmcdn.com';
-                    console.log(`imageUrl is: ${imgSrcUrl}${product.stamps[0].imageUrl}`);
+                        // Create a new product element
+                        const productElement = document.createElement('div');
+                        productElement.classList.add('product');
 
-                    console.log(`The product price is: ${product.price.sellingPrice}`);
-                    
-                    // Sonuçları HTML içine yerleştirme
-                    resultsSection.innerHTML = `
-                        <div id="results" class="grid-container">
-                            <div id="image-slider">
-                                ${product.images.map((image, index) => `
-                                    <img src="${imgSrcUrl}${image}" alt="${product.imageAlt}_${index}">
-                                `).join('')}
+                        // Generate the slider images HTML
+                        const sliderImages = product.images.map((image, i) => `
+                            <img src="${imgSrcUrl}${image}" alt="${product.imageAlt}_${i}">
+                        `).join('');
+
+                        productElement.innerHTML = `
+                            <div id="image-slider-${index}" class="image-slider">
+                                ${sliderImages}
                             </div>
-                            <a href="${productUrl}">${product.name}</a>
+                            <a href="${productUrl}" target="_blank">${product.name}</a>
                             <p>Price: ${product.price.sellingPrice}</p>
-                        </div>
-                    `;
+                        `;
 
-                    const images = document.querySelectorAll('#image-slider img');
-                    let currentIndex = 0;
+                        resultsSection.appendChild(productElement);
 
-                    function showSlide(index) {
-                        images.forEach((img, i) => {
-                            img.classList.remove('active');
-                            if (i === index) {
-                                img.classList.add('active');
-                            }
-                        });
-                    }
+                        // Initialize the slider for this product
+                        const images = productElement.querySelectorAll(`#image-slider-${index} img`);
+                        let currentIndex = 0;
 
-                    function nextSlide() {
-                        currentIndex = (currentIndex + 1) % images.length;
-                        showSlide(currentIndex);
-                    }
+                        function showSlide(index) {
+                            images.forEach((img, i) => {
+                                img.classList.remove('active');
+                                if (i === index) {
+                                    img.classList.add('active');
+                                }
+                            });
+                        }
 
-                    showSlide(currentIndex); // İlk resmi göster
-                    setInterval(nextSlide, 3000); // 3000 ms = 3 seconds for slide change
+                        function nextSlide() {
+                            currentIndex = (currentIndex + 1) % images.length;
+                            showSlide(currentIndex);
+                        }
+
+                        showSlide(currentIndex); // Show the first image
+                        setInterval(nextSlide, 3000); // 3000 ms = 3 seconds for slide change
+                    });
                 } else {
                     resultsSection.innerHTML = '<p>Belirtilen <script> içeriği bulunamadı.</p>';
                 }
