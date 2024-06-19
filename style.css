@@ -34,6 +34,10 @@ main {
 .product {
     border: 1px solid #ddd; /* Border for each product */
     padding: 10px; /* Padding for each product */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
 .image-slider {
@@ -41,6 +45,7 @@ main {
     width: 100%;
     overflow: hidden;
     height: 200px; /* Adjust the height as needed */
+    margin-bottom: 10px; /* Space between slider and product info */
 }
 
 .image-slider img {
