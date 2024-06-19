@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     resultsSection.innerHTML = ''; // Clear previous results
 
-                    data.products.slice(0, 4).forEach((product, index) => {
+                    data.products.forEach((product, index) => {
                         const siteUrl = 'https://www.trendyol.com';
                         const productUrl = `${siteUrl}${product.url}`;
                         const imgSrcUrl = 'https://cdn.dsmcdn.com';
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
             resultsSection.innerHTML = `
                 <div>
                     <h2>Trendyol</h2>
-                    <p><a href="${url}" target="_blank">Arama Sonuçları Yükleniyor...</a></p>
+                    <p><a href="${url}" target="_blank">Arama Sonuçları</a></p>
                 </div>
             `;
         } else {
