@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
             resultsSection.innerHTML = `
                 <div>
                     <h2>Trendyol</h2>
-                    <p><a href="${url}" target="_blank">Arama Sonuçları</a></p>
+                    <p><a href="${url}" target="_blank">Arama Sonuçları Yükleniyor | Lütfen Bekleyiniz...</a></p>
                 </div>
             `;
         } else {
