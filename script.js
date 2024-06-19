@@ -42,7 +42,7 @@ fetch(proxyUrl + url, {
     console.log(`ProductUrl is: ${productUrl}`);
 
     const imgSrcUrl = 'https://cdn.dsmcdn.com';
-    const imgUrl = `${imgSrcUrl}${product.stmaps[0].imageUrl}`;
+    const imgUrl = `${imgSrcUrl}${product.stamps[0].imageUrl}`;
     console.log(`imageUrl is: ${imgUrl}`);
 
     console.log(`The product price is: ${product.price.sellingPrice}`);
