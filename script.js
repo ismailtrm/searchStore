@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function fetchBershkaData(query) {
-    const url = `https://www.bershka.com/tr/q/${encodeURIComponent(query)}`;
+        const url = `https://www.bershka.com/tr/q/${encodeURIComponent(query)}`;
         
         fetch(proxyUrl + url, {
             headers: {
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.text();
         })
         .then(html => {
-            console.log(match);
+            console.log(`${html}`)
             const scriptRegex = /<script type="application\/javascript">([\s\S]*?)<\/script>/;
             const match = html.match(scriptRegex);
             
@@ -200,3 +200,4 @@ document.addEventListener('DOMContentLoaded', function() {
             resultsSection.innerHTML = '<p>An error occurred while fetching data. Please try again later.</p>';
         });
     }
+});
