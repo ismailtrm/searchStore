@@ -11,7 +11,11 @@ header {
     text-align: center;
 }
 
-header input {
+header div {
+    margin-bottom: 10px;
+}
+
+header input[type="text"] {
     margin-right: 10px;
     padding: 5px;
 }
@@ -26,14 +30,21 @@ main {
 
 .column-container {
     display: flex;
-    flex-direction: column;
-    gap: 20px; /* Space between items */
-    padding: 20px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.single-column .product {
+    flex: 1 1 100%;
+}
+
+.double-column .product {
+    flex: 1 1 calc(50% - 20px);
 }
 
 .product {
-    border: 1px solid #ddd; /* Border for each product */
-    padding: 10px; /* Padding for each product */
+    border: 1px solid #ddd;
+    padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -44,20 +55,20 @@ main {
     position: relative;
     width: 100%;
     overflow: hidden;
-    height: 200px; /* Adjust the height as needed */
-    margin-bottom: 10px; /* Space between slider and product info */
+    height: 200px;
+    margin-bottom: 10px;
 }
 
 .image-slider img {
     width: 100%;
-    display: none; /* Hide images initially */
+    display: none;
     position: absolute;
     top: 0;
     left: 0;
 }
 
 .image-slider img.active {
-    display: block; /* Show the active image */
+    display: block;
 }
 
 footer {
