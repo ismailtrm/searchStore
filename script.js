@@ -29,8 +29,8 @@ fetch(proxyUrl + url, {
         // <script> içeriği bulundu, şimdi bunu gösterelim
         console.log(match[1]);
        // Removing the first tag and parsing the JSON data
-        let jsonString = match[1].replace('window.__SEARCH_APP_INITIAL_STATE__=', '');
-        const jsonString = jsonString.replace(`window.slpName='';window.TYPageName='product_search_result';window.isSearchResult=true;window.pageType="search";`, '');
+        var jsonString = match[1].replace('window.__SEARCH_APP_INITIAL_STATE__=', '');
+        var jsonString = jsonString.replace(`window.slpName='';window.TYPageName='product_search_result';window.isSearchResult=true;window.pageType="search";`, '');
 
         console.log(jsonString);
         const data = JSON.parse(jsonString);
