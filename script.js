@@ -35,13 +35,21 @@ fetch(proxyUrl + url, {
         console.log(jsonString);
         const data = JSON.parse(jsonString);
         // Accessing the product price
-        const product = data.products[0];
-        const price = product.price.sellingPrice;
-
+        const product = data.products[1];
+        
+        const siteUrl = 'https://www.trendyol.com'
+        const prodcutUrl = `${siteUrl}${product.url}`
+        console.log(`ProductUrl is: ${productUrl}`);
+        const imgSrcUrl = 'https://cdn.dsmcdn.com'
+        const imgUrl = `${imgSrcUrl}${product.stmaps[0].imageUrl}`
+        console.log(`imageUrl is: ${imgUrl}`);
+        
         console.log(`The product price is: ${price}`);
         resultsSection.innerHTML = `
                     <div>
-                    <p>${product}, ${price}</p>
+                    <img src=`${imgUrl}` alt=`${product.imageAlt}`> 
+                    <a href=`${productUrl}`>${product.name}</a>
+                    <p> Price: ${product.price.sellingPrice}</p>
                     </div>
                                     `;
         } else {
