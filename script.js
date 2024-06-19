@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     resultsSection.innerHTML = ''; // Clear previous results
 
-                    data.products.forEach((product, index) => {
+                    data.products.slice(0, 4).forEach((product, index) => {
                         const siteUrl = 'https://www.trendyol.com';
                         const productUrl = `${siteUrl}${product.url}`;
                         const imgSrcUrl = 'https://cdn.dsmcdn.com';
