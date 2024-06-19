@@ -25,16 +25,17 @@ fetch(proxyUrl + url, {
 .then(html => {
     const scriptRegex = /<script type="application\/javascript">([\s\S]*?)<\/script>/;
     const match = html.match(scriptRegex);
+    
     if (match && match[1]) {
-        // <script> içeriği bulundu, şimdi bunu gösterelim
-        console.log(match[1]);
-       // Removing the first tag and parsing the JSON data
-        var jsonString = match[1].replace('window.__SEARCH_APP_INITIAL_STATE__=', '');
-        jsonString = jsonString.replace(`;window.slpName='';window.TYPageName='product_search_result';window.isSearchResult=true;window.pageType="search";`, '');
+        
+    let jsonString = match[1].replace('window.__SEARCH_APP_INITIAL_STATE__=', '');
+    jsonString = jsonString.replace(/;window\.slpName='';window\.TYPageName='product_search_result';window\.isSearchResult=true;window\.pageType="search";/, '');
 
-        console.log(jsonString);
-        const data = JSON.parse(jsonString);
-        // Accessing the product price
+    console.log(jsonString);
+    const data = JSON.parse(jsonString);
+    
+    // İlk ürünü seçiyoruz
+    const product = data.products[1]; // İndeks 0'dan başladı
 
     const siteUrl = 'https://www.trendyol.com';
     const productUrl = `${siteUrl}${product.url}`;
@@ -44,17 +45,16 @@ fetch(proxyUrl + url, {
     const imgUrl = `${imgSrcUrl}${product.stmaps[0].imageUrl}`;
     console.log(`imageUrl is: ${imgUrl}`);
 
-    const price = product.price.sellingPrice;
-    console.log(`The product price is: ${price}`);
+    console.log(`The product price is: ${product.price.sellingPrice}`);
 
     // Sonuçları HTML içine yerleştirme
     resultsSection.innerHTML = `
         <div>
             <img src="${imgUrl}" alt="${product.imageAlt}">
             <a href="${productUrl}">${product.name}</a>
-            <p>Price: ${price}</p>
+            <p>Price: ${product.price.sellingPrice}</p>
         </div>
-                                `;
+    `;
         } else {
         resultsSection.innerHTML = '<p>Belirtilen <script> içeriği bulunamadı.</p>';
     }})
