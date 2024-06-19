@@ -20,99 +20,124 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchQuery = document.getElementById('search-query');
     const resultsSection = document.getElementById('results');
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-    
+
+    const dataSources = {
+        trendyol: {
+            checkboxId: 'trendyol',
+            fetchData: fetchTrendyolData
+        },
+        bershka: {
+            checkboxId: 'bershka',
+            fetchData: fetchBershkaData
+        }
+    };
+
     searchButton.addEventListener('click', function() {
         const query = searchQuery.value.trim();
-        if (query !== "") {
-            const url = `https://www.trendyol.com/sr?q=${encodeURIComponent(query)}`;
-            
-            fetch(proxyUrl + url, {
-                headers: {
-                    'Origin': 'https://search-store.vercel.app/' // Replace with your actual domain
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok ' + response.statusText);
-                }
-                return response.text();
-            })
-            .then(html => {
-                const scriptRegex = /<script type="application\/javascript">([\s\S]*?)<\/script>/;
-                const match = html.match(scriptRegex);
-                
-                if (match && match[1]) {
-                    let jsonString = match[1].replace('window.__SEARCH_APP_INITIAL_STATE__=', '');
-                    jsonString = jsonString.replace(/;window\.slpName='';window\.TYPageName='product_search_result';window\.isSearchResult=true;window\.pageType="search";/, '');
+        const selectedSources = Object.keys(dataSources).filter(source => document.getElementById(dataSources[source].checkboxId).checked);
+        
+        if (query !== "" && selectedSources.length > 0) {
+            resultsSection.innerHTML = ''; // Clear previous results
+            resultsSection.className = selectedSources.length === 2 ? 'column-container double-column' : 'column-container single-column';
 
-                    console.log(jsonString);
-                    const data = JSON.parse(jsonString);
-                    
-                    resultsSection.innerHTML = ''; // Clear previous results
-
-                    data.products.forEach((product, index) => {
-                        const siteUrl = 'https://www.trendyol.com';
-                        const productUrl = `${siteUrl}${product.url}`;
-                        const imgSrcUrl = 'https://cdn.dsmcdn.com';
-
-                        // Create a new product element
-                        const productElement = document.createElement('div');
-                        productElement.classList.add('product');
-
-                        // Generate the slider images HTML
-                        const sliderImages = product.images.map((image, i) => `
-                            <img src="${imgSrcUrl}${image}" alt="${product.imageAlt}_${i}">
-                        `).join('');
-
-                        productElement.innerHTML = `
-                            <div id="image-slider-${index}" class="image-slider">
-                                ${sliderImages}
-                            </div>
-                            <a href="${productUrl}" target="_blank">${product.name}</a>
-                            <p>Price: ${product.price.sellingPrice}</p>
-                        `;
-
-                        resultsSection.appendChild(productElement);
-
-                        // Initialize the slider for this product
-                        const images = productElement.querySelectorAll(`#image-slider-${index} img`);
-                        let currentIndex = 0;
-
-                        function showSlide(index) {
-                            images.forEach((img, i) => {
-                                img.classList.remove('active');
-                                if (i === index) {
-                                    img.classList.add('active');
-                                }
-                            });
-                        }
-
-                        function nextSlide() {
-                            currentIndex = (currentIndex + 1) % images.length;
-                            showSlide(currentIndex);
-                        }
-
-                        showSlide(currentIndex); // Show the first image
-                        setInterval(nextSlide, 3000); // 3000 ms = 3 seconds for slide change
-                    });
-                } else {
-                    resultsSection.innerHTML = '<p>Belirtilen <script> içeriği bulunamadı.</p>';
-                }
-            })
-            .catch(error => {
-                console.error('There was a problem with the fetch operation:', error);
-                resultsSection.innerHTML = '<p>An error occurred while fetching data. Please try again later.</p>';
-                console.log(proxyUrl + encodeURIComponent(url));
+            selectedSources.forEach(source => {
+                dataSources[source].fetchData(query);
             });
-
-            resultsSection.innerHTML = `
-                <div>
-                    <h2>Trendyol</h2>
-                    <p><a href="${url}" target="_blank">Arama Sonuçları Yükleniyor | Lütfen Bekleyiniz...</a></p>
-                </div>
-            `;
         } else {
-            resultsSection.innerHTML = '<p>Lütfen arama yapmak için bir kelime girin.</p>';
+            resultsSection.innerHTML = '<p>Lütfen arama yapmak için bir kelime girin ve en az bir kaynak seçin.</p>';
         }
     });
+
+    function fetchTrendyolData(query) {
+        const url = `https://www.trendyol.com/sr?q=${encodeURIComponent(query)}`;
+        
+        fetch(proxyUrl + url, {
+            headers: {
+                'Origin': 'https://search-store.vercel.app/'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.text();
+        })
+        .then(html => {
+            const scriptRegex = /<script type="application\/javascript">([\s\S]*?)<\/script>/;
+            const match = html.match(scriptRegex);
+            
+            if (match && match[1]) {
+                let jsonString = match[1].replace('window.__SEARCH_APP_INITIAL_STATE__=', '');
+                jsonString = jsonString.replace(/;window\.slpName='';window\.TYPageName='product_search_result';window\.isSearchResult=true;window\.pageType="search";/, '');
+
+                const data = JSON.parse(jsonString);
+                
+                data.products.forEach((product, index) => {
+                    const siteUrl = 'https://www.trendyol.com';
+                    const productUrl = `${siteUrl}${product.url}`;
+                    const imgSrcUrl = 'https://cdn.dsmcdn.com';
+
+                    const productElement = document.createElement('div');
+                    productElement.classList.add('product');
+
+                    const sliderImages = product.images.map((image, i) => `
+                        <img src="${imgSrcUrl}${image}" alt="${product.imageAlt}_${i}">
+                    `).join('');
+
+                    productElement.innerHTML = `
+                        <div id="image-slider-trendyol-${index}" class="image-slider">
+                            ${sliderImages}
+                        </div>
+                        <a href="${productUrl}" target="_blank">${product.name}</a>
+                        <p>Price: ${product.price.sellingPrice}</p>
+                    `;
+
+                    resultsSection.appendChild(productElement);
+
+                    const images = productElement.querySelectorAll(`#image-slider-trendyol-${index} img`);
+                    let currentIndex = 0;
+
+                    function showSlide(index) {
+                        images.forEach((img, i) => {
+                            img.classList.remove('active');
+                            if (i === index) {
+                                img.classList.add('active');
+                            }
+                        });
+                    }
+
+                    function nextSlide() {
+                        currentIndex = (currentIndex + 1) % images.length;
+                        showSlide(currentIndex);
+                    }
+
+                    showSlide(currentIndex);
+                    setInterval(nextSlide, 3000);
+                });
+            } else {
+                resultsSection.innerHTML = '<p>Belirtilen <script> içeriği bulunamadı.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+            resultsSection.innerHTML = '<p>An error occurred while fetching data. Please try again later.</p>';
+        });
+    }
+
+    function fetchBershkaData(query) {
+        // Bershka veri çekme algoritması burada yer alacak
+        // Dummy data ekleyerek alanı dolduralım
+        const productElement = document.createElement('div');
+        productElement.classList.add('product');
+        
+        productElement.innerHTML = `
+            <div class="image-slider">
+                <img src="https://via.placeholder.com/200" alt="Placeholder" class="active">
+            </div>
+            <a href="#" target="_blank">Bershka Ürünü</a>
+            <p>Price: 100 TL</p>
+        `;
+        
+        resultsSection.appendChild(productElement);
+    }
 });
