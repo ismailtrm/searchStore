@@ -29,7 +29,7 @@ fetch(proxyUrl + url, {
         // <script> içeriği bulundu, şimdi bunu gösterelim
         console.log(match[1]);
        // Removing the first tag and parsing the JSON data
-        const jsonString = match[1].replace('window.SEARCH_APP_INITIAL_STATE=', '');
+        const jsonString = match[1].replace('window.__SEARCH_APP_INITIAL_STATE__=', '');
         console.log(jsonString);
         const data = JSON.parse(jsonString);
         // Accessing the product price
