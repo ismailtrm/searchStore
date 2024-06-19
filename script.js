@@ -30,8 +30,8 @@ fetch(proxyUrl + url, {
         console.log(match[1]);
        // Removing the first tag and parsing the JSON data
         const jsonString = match[1].replace('window.SEARCH_APP_INITIAL_STATE=', '');
+        console.log(jsonString);
         const data = JSON.parse(jsonString);
-
         // Accessing the product price
         const product = data.products[0];
         const price = product.price.sellingPrice;
