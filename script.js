@@ -125,19 +125,78 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function fetchBershkaData(query) {
-        // Bershka veri çekme algoritması burada yer alacak
-        // Dummy data ekleyerek alanı dolduralım
-        const productElement = document.createElement('div');
-        productElement.classList.add('product');
+    const url = `https://www.bershka.com/tr/q/${encodeURIComponent(query)}`;
         
-        productElement.innerHTML = `
-            <div class="image-slider">
-                <img src="https://via.placeholder.com/200" alt="Placeholder" class="active">
-            </div>
-            <a href="#" target="_blank">Bershka Ürünü</a>
-            <p>Price: 100 TL</p>
-        `;
-        
-        resultsSection.appendChild(productElement);
+        fetch(proxyUrl + url, {
+            headers: {
+                'Origin': 'https://search-store.vercel.app/'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.text();
+        })
+        .then(html => {
+            console.log(match);
+            const scriptRegex = /<script type="application\/javascript">([\s\S]*?)<\/script>/;
+            const match = html.match(scriptRegex);
+            
+            if (match && match[1]) {
+                let jsonString = match[1].replace('window.__SEARCH_APP_INITIAL_STATE__=', '');
+                jsonString = jsonString.replace(/;window\.slpName='';window\.TYPageName='product_search_result';window\.isSearchResult=true;window\.pageType="search";/, '');
+
+                const data = JSON.parse(jsonString);
+                
+                data.products.forEach((product, index) => {
+                    const siteUrl = 'https://www.trendyol.com';
+                    const productUrl = `${siteUrl}${product.url}`;
+                    const imgSrcUrl = 'https://cdn.dsmcdn.com';
+
+                    const productElement = document.createElement('div');
+                    productElement.classList.add('product');
+
+                    const sliderImages = product.images.map((image, i) => `
+                        <img src="${imgSrcUrl}${image}" alt="${product.imageAlt}_${i}">
+                    `).join('');
+
+                    productElement.innerHTML = `
+                        <div id="image-slider-trendyol-${index}" class="image-slider">
+                            ${sliderImages}
+                        </div>
+                        <a href="${productUrl}" target="_blank">${product.name}</a>
+                        <p>Price: ${product.price.sellingPrice}</p>
+                    `;
+
+                    resultsSection.appendChild(productElement);
+
+                    const images = productElement.querySelectorAll(`#image-slider-trendyol-${index} img`);
+                    let currentIndex = 0;
+
+                    function showSlide(index) {
+                        images.forEach((img, i) => {
+                            img.classList.remove('active');
+                            if (i === index) {
+                                img.classList.add('active');
+                            }
+                        });
+                    }
+
+                    function nextSlide() {
+                        currentIndex = (currentIndex + 1) % images.length;
+                        showSlide(currentIndex);
+                    }
+
+                    showSlide(currentIndex);
+                    setInterval(nextSlide, 3000);
+                });
+            } else {
+                resultsSection.innerHTML = '<p>Belirtilen <script> içeriği bulunamadı.</p>';
+            }
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+            resultsSection.innerHTML = '<p>An error occurred while fetching data. Please try again later.</p>';
+        });
     }
-});
