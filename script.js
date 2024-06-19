@@ -30,7 +30,7 @@ fetch(proxyUrl + url, {
         console.log(match[1]);
        // Removing the first tag and parsing the JSON data
         var jsonString = match[1].replace('window.__SEARCH_APP_INITIAL_STATE__=', '');
-        jsonString = jsonString.replace(`window.slpName='';window.TYPageName='product_search_result';window.isSearchResult=true;window.pageType="search";`, '');
+        jsonString = jsonString.replace(`;window.slpName='';window.TYPageName='product_search_result';window.isSearchResult=true;window.pageType="search";`, '');
 
         console.log(jsonString);
         const data = JSON.parse(jsonString);
