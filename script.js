@@ -42,7 +42,6 @@ fetch(proxyUrl + url, {
     console.log(`ProductUrl is: ${productUrl}`);
 
     const imgSrcUrl = 'https://cdn.dsmcdn.com';
-    const imgUrl = `${imgSrcUrl}${product.images[0]}`;
     console.log(`imageUrl is: ${imgUrl}`);
 
     console.log(`The product price is: ${product.price.sellingPrice}`);
@@ -50,12 +49,10 @@ fetch(proxyUrl + url, {
     resultsSection.innerHTML = `
         <div>
             <div id="image-slider">
-            <img src=`${imgSrcUrl}${product.images[0]}` alt="${product.imageAlt}_0">
-            <img src=`${imgSrcUrl}${product.images[1]}` alt="${product.imageAlt}_1">
-            <img src=`${imgSrcUrl}${product.images[2]}` alt="${product.imageAlt}_2">
+            <img src=`${imgSrcUrl}${product.images[0]}` alt=`${product.imageAlt}_0`>
+            <img src=`${imgSrcUrl}${product.images[1]}` alt=`{product.imageAlt}_1`>
+            <img src=`${imgSrcUrl}${product.images[2]}` alt=`${product.imageAlt}_2`>
             </div>
-
-            <img src="${imgUrl}" alt="${product.imageAlt}">
             <a href="${productUrl}">${product.name}</a>
             <p>Price: ${product.price.sellingPrice}</p>
         </div>
