@@ -43,3 +43,19 @@ footer {
     width: 100%;
     bottom: 0;
 }
+
+#image-slider {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+#image-slider img {
+    width: 100%;
+    display: none; /* Görselleri gizli yapıyoruz */
+}
+
+#image-slider img.active {
+    display: block; /* Aktif görseli gösteriyoruz */
+}
+
