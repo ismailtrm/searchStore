@@ -28,12 +28,18 @@ fetch(proxyUrl + url, {
     if (match && match[1]) {
         // <script> içeriği bulundu, şimdi bunu gösterelim
         console.log(match[1]);
-        const veri = JSON.parse(match[1]);
-        const contentSection = document.getElementById('content-section');
-        console.log(`${veri.products}`);
+       // Removing the first tag and parsing the JSON data
+        const jsonString = match[1].replace('window.SEARCH_APP_INITIAL_STATE=', '');
+        const data = JSON.parse(jsonString);
+
+        // Accessing the product price
+        const product = data.products[0];
+        const price = product.price.sellingPrice;
+
+        console.log(`The product price is: ${price}`);
         resultsSection.innerHTML = `
                     <div>
-                    <p>${veri.products}</p>
+                    <p>${product}, ${price}</p>
                     </div>
                                     `;
         } else {
