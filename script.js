@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     // Sonuçları HTML içine yerleştirme
                     resultsSection.innerHTML = `
-                        <div>
+                        <div id="results" class="grid-container">
                             <div id="image-slider">
                                 ${product.images.map((image, index) => `
                                     <img src="${imgSrcUrl}${image}" alt="${product.imageAlt}_${index}">
