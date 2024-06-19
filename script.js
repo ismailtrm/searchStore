@@ -42,19 +42,43 @@ fetch(proxyUrl + url, {
     console.log(`ProductUrl is: ${productUrl}`);
 
     const imgSrcUrl = 'https://cdn.dsmcdn.com';
-    const imgUrl = `${imgSrcUrl}${product.stamps[0].imageUrl}`;
+    const imgUrl = `${imgSrcUrl}${product.images[0]}`;
     console.log(`imageUrl is: ${imgUrl}`);
 
     console.log(`The product price is: ${product.price.sellingPrice}`);
-
     // Sonuçları HTML içine yerleştirme
     resultsSection.innerHTML = `
         <div>
+            <div id="image-slider">
+            <img src=`${imgSrcUrl}${product.images[0]}` alt="${product.imageAlt}_0">
+            <img src=`${imgSrcUrl}${product.images[1]}` alt="${product.imageAlt}_1">
+            <img src=`${imgSrcUrl}${product.images[2]}` alt="${product.imageAlt}_2">
+            </div>
+
             <img src="${imgUrl}" alt="${product.imageAlt}">
             <a href="${productUrl}">${product.name}</a>
             <p>Price: ${product.price.sellingPrice}</p>
         </div>
     `;
+    const images = document.querySelectorAll('#image-slider img');
+    let currentIndex = 0;
+
+    function showSlide(index) {
+        images.forEach((img, i) => {
+            img.classList.remove('active');
+            if (i === index) {
+                img.classList.add('active');
+                }
+        });
+    }
+
+    function nextSlide() {
+        currentIndex = (currentIndex + 1) % images.length;
+        showSlide(currentIndex);
+    }
+
+    setInterval(nextSlide, 3000); // 3000 ms = 3 seconds for slide change
+
         } else {
         resultsSection.innerHTML = '<p>Belirtilen <script> içeriği bulunamadı.</p>';
     }})
