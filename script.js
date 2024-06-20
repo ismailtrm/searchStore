@@ -68,8 +68,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         fetch(url, {
             headers: {
-                'method': 'GET'
-                'Origin': "https://search-store.vercel.app/"
+                'method': 'GET',
+                'Origin': 'https://search-store.vercel.app/'
             }
         })
         .then(response => {
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const url = `https://www.bershka.com/tr/q/${encodeURIComponent(query)}`;
         var userAgent = navigator.userAgent;
 
-        fetch(proxyUrl + url, {
+        fetch(url, {
             headers: {
                 'Origin': 'https://search-store.vercel.app/',
                 'User-Agent': `${userAgent}`
