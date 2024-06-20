@@ -1,35 +1,19 @@
-        (function() {
-            var cors_api_host = 'cors-anywhere.herokuapp.com';
-            var cors_api_url = 'https://' + cors_api_host + '/';
-            var origin = window.location.protocol + '//' + window.location.host;
-
-            // Save the original fetch function
-            var originalFetch = fetch;
-
-            // Override the fetch function
-            window.fetch = function() {
-                var args = Array.from(arguments);
-                var input = args[0];
-                var init = args[1] || {};
-
-                // If input is a Request object, extract the URL
-                var url = (input instanceof Request) ? input.url : input;
-
-                var targetOrigin = /^https?:\/\/([^\/]+)/i.exec(url);
-
-                if (targetOrigin && targetOrigin[0].toLowerCase() !== origin &&
-                    targetOrigin[1] !== cors_api_host) {
-                    // Prepend the CORS proxy URL
-                    if (input instanceof Request) {
-                        input = new Request(cors_api_url + url, input);
-                    } else {
-                        args[0] = cors_api_url + url;
-                    }
-                }
-
-                return originalFetch.apply(this, args);
-            };
-        })();
+(function() {
+    var cors_api_host = 'cors-anywhere.herokuapp.com';
+    var cors_api_url = 'https://' + cors_api_host + '/';
+    var slice = [].slice;
+    var origin = window.location.protocol + '//' + window.location.host;
+    var open = fetch.prototype.open;
+    fetch.prototype.open = function() {
+        var args = slice.call(arguments);
+        var targetOrigin = /^https?:\/\/([^\/]+)/i.exec(args[1]);
+        if (targetOrigin && targetOrigin[0].toLowerCase() !== origin &&
+            targetOrigin[1] !== cors_api_host) {
+            args[1] = cors_api_url + args[1];
+        }
+        return open.apply(this, args);
+    };
+})();
 
 document.addEventListener('DOMContentLoaded', function() {
     const searchButton = document.getElementById('search-button');
@@ -154,6 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         fetch(url, {
             headers: {
+                'method': 'GET',
                 'Origin': 'https://search-store.vercel.app/',
                 'User-Agent': `${userAgent}`
             }
@@ -227,3 +212,26 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+const nock = require('nock');
+const axios = require('axios');  // Using axios for making HTTP requests
+
+// Mock the HTTP request
+nock('https://www.bershka.com')
+  .get('/tr/q/etek')
+  .reply(200, {
+    success: true,
+    data: 'Mocked response data'
+  });
+
+// Function to test
+async function fetchData() {
+  const response = await axios.get('https://www.bershka.com/tr/q/etek');
+  return response.data;
+}
+
+// Test case
+(async () => {
+  const data = await fetchData();
+  console.log(data);  // Output: { success: true, data: 'Mocked response data' }
+})();
