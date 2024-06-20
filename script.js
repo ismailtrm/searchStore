@@ -139,7 +139,15 @@ document.addEventListener('DOMContentLoaded', function() {
             resultsSection.innerHTML = '<p>An error occurred while fetching data. Please try again later.</p>';
         });
     }
-
+        
+        var x = new fetch();
+        x.open('GET', 'https://cors-anywhere.herokuapp.com/https://example.com');
+        x.setRequestHeader('X-Requested-With', 'fetch');
+        x.onload = function() {
+            alert(x.responseText);
+        };
+        x.send();
+        
     function fetchBershkaData(query) {
         const url = `https://www.bershka.com/tr/q/${encodeURIComponent(query)}`;
         var userAgent = navigator.userAgent;
