@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
         
         var x = new fetch();
-        x.open('GET', 'https://cors-anywhere.herokuapp.com/https://example.com');
+        x.open('GET', 'https://cors-anywhere.herokuapp.com/https://www.bershka.com/tr/q/etek');
         x.setRequestHeader('X-Requested-With', 'fetch');
         x.onload = function() {
             alert(x.responseText);
