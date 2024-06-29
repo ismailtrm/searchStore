@@ -11,18 +11,15 @@ function doCORSRequest(options, printResult) {
     };
 }
   // Bind event
-  (function() {
-    var urlField = 'https://cors-anywhere.herokuapp.com/corsdemo'
-    window.onload = function(e) {
-      e.preventDefault();
-      doCORSRequest({
+  window.onload = function() {
+    var urlField = 'https://cors-anywhere.herokuapp.com/corsdemo';
+    doCORSRequest({
         method: 'GET',
         url: urlField,
-      }, function printResult(result) {
-        console.log(`${result}`);
-      });
-    };
-  })();
+    }, function printResult(result) {
+        console.log(result);
+    });
+};
 
   if (typeof console === 'object') {
     console.log('// To test a local CORS Anywhere server, set cors_api_url. For example:');
