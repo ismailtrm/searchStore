@@ -12,10 +12,9 @@ function doCORSRequest(options, printResult) {
 }
   // Bind event
   window.onload = function() {
-    var urlField = 'https://cors-anywhere.herokuapp.com/corsdemo';
     doCORSRequest({
         method: 'GET',
-        url: urlField,
+        url: 'https://cors-anywhere.herokuapp.com/corsdemo',
     }, function printResult(result) {
         console.log(result);
     });
