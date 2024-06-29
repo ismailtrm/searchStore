@@ -30,6 +30,59 @@
     };
 })();
 
+const url = `https://cors-anywhere.herokuapp.com/corsdemo`;
+
+fetch(url, {
+    headers: {
+        'Origin': 'https://search-store.vercel.app/'
+    },
+    mode: 'cors'
+})
+.then(response => {
+    if (!response.ok) {
+        throw new Error('Network response was not ok ' + response.statusText);
+    }
+    return response.text();
+})
+.then(html => {
+    // Create a new DOM parser
+    const parser = new DOMParser();
+    // Parse the HTML string into a document
+    const doc = parser.parseFromString(html, 'text/html');
+    // Find the hidden input element
+    const hiddenInput = doc.querySelector('input[name="accessRequest"]');
+    if (hiddenInput) {
+        // Get the value of the hidden input
+        const hiddenValue = hiddenInput.value;
+        console.log('Hidden input value:', hiddenValue);
+        
+        // Use the hiddenValue to make another fetch request
+        const sUrl = `https://cors-anywhere.herokuapp.com/corsdemo?accessRequest=${hiddenValue}`;
+        return fetch(sUrl, {
+            headers: {
+                'Origin': 'https://search-store.vercel.app/'
+            },
+            mode: 'cors'
+        });
+    } else {
+        console.log('Hidden input not found');
+        throw new Error('Hidden input not found');
+    }
+})
+.then(response => {
+    if (!response.ok) {
+        throw new Error('Network response was not ok ' + response.statusText);
+    }
+    return response.text();
+})
+.then(data => {
+    // Handle the response of the second fetch request
+    console.log('Response from second request:', data);
+})
+.catch(error => {
+    console.error('Fetch error:', error);
+});
+
 document.addEventListener('DOMContentLoaded', function() {
     const searchButton = document.getElementById('search-button');
     const searchQuery = document.getElementById('search-query');
