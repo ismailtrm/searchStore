@@ -243,4 +243,4 @@ document.addEventListener('DOMContentLoaded', function() {
         showSlide(currentIndex);
         setInterval(nextSlide, 3000);
     }
-});
+})};
