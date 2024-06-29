@@ -18,7 +18,6 @@ fetch(url, {
         'sec-ch-ua-mobile': '?0',
         'sec-ch-ua-platform': `${navigator.userAgentData.getHighEntropyValues(['sec-ch-ua-platform'])}`
     },
-    mode: 'no-cors'
 })
 .then(response => {
     if (!response.ok) {
