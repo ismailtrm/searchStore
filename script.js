@@ -13,7 +13,7 @@ function doCORSRequest(options, printResult) {
   // Bind event
   (function() {
     var urlField = 'https://cors-anywhere.herokuapp.com/corsdemo'
-    document.getElementById('search-button').onclick = function(e) {
+    window.onload = function(e) {
       e.preventDefault();
       doCORSRequest({
         method: 'GET',
