@@ -72,17 +72,17 @@ document.addEventListener('DOMContentLoaded', function() {
             if (match && match[1]) {
                 let jsonString = match[1].replace('window.__SEARCH_APP_INITIAL_STATE__=', '');
                 jsonString = jsonString.replace(/;window\.slpName='';window\.TYPageName='product_search_result';window\.isSearchResult=true;window\.pageType="search";/, '');
-
+    
                 const data = JSON.parse(jsonString);
                 
                 data.products.forEach((product, index) => {
                     const siteUrl = 'https://www.trendyol.com';
                     const productUrl = `${siteUrl}${product.url}`;
                     const imgSrcUrl = 'https://cdn.dsmcdn.com';
-
+    
                     const productElement = createProductElement(product, imgSrcUrl, productUrl);
                     resultsSection.appendChild(productElement);
-
+    
                     setupImageSlider(`image-slider-trendyol-${index}`, productElement);
                 });
             } else {
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error);
-            resultsSection.innerHTML = '<p>An error occurred while fetching data. Please try again later.</p>';
+            resultsSection.innerHTML = '<p>An error occurred while fetching data from Trendyol. Please try again later.</p>';
         });
     }
 
