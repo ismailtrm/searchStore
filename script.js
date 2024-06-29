@@ -19,9 +19,10 @@ function doCORSRequest(options, printResult) {
           url: 'https://cors-anywhere.herokuapp.com/corsdemo',
       }, function printResult(result) {
           printer = result; // printer değişkeni printResult içinde atanıyor.
-          console.log(printer); // İsteğin sonucunu burada konsola yazdırabilirsiniz.
       });
   };
+
+  console.log(printer); // İsteğin sonucunu burada konsola yazdırabilirsiniz.
 
   if (typeof console === 'object') {
     console.log('// To test a local CORS Anywhere server, set cors_api_url. For example:');
