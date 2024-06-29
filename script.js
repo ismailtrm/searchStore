@@ -1,35 +1,3 @@
-(function() {
-    var cors_api_host = 'cors-anywhere.herokuapp.com';
-    var cors_api_url = 'https://' + cors_api_host + '/';
-
-    // Original fetch function reference
-    var originalFetch = window.fetch;
-
-    // Override fetch function
-    window.fetch = function() {
-        var args = [].slice.call(arguments);
-        var url = args[0];
-        var options = args[1] || {};
-
-        // Check if the request URL matches the target origin
-        if (/^https?:\/\/([^\/]+)/i.test(url)) {
-            // Modify the URL to go through the CORS proxy if it's not from the same origin or the CORS proxy itself
-            if (RegExp.$1.toLowerCase() !== window.location.host.split(':')[0] && RegExp.$1 !== cors_api_host) {
-                args[0] = cors_api_url + url;
-                // Ensure CORS headers are added
-                options.mode = 'cors';
-                options.headers = options.headers || {};
-                options.headers['X-Requested-With'] = 'fetch';
-                options.headers['Origin'] = window.location.origin; 
-                options.headers['User-Agent'] = navigator.userAgent; // Add any other headers as needed
-            }
-        }
-
-        // Call the original fetch function with modified arguments
-        return originalFetch.apply(this, args);
-    };
-})();
-
 const url = `https://cors-anywhere.herokuapp.com/corsdemo`;
 
 fetch(url, {
@@ -85,6 +53,38 @@ fetch(url, {
 .catch(error => {
     console.error('Fetch error:', error);
 });
+
+(function() {
+    var cors_api_host = 'cors-anywhere.herokuapp.com';
+    var cors_api_url = 'https://' + cors_api_host + '/';
+
+    // Original fetch function reference
+    var originalFetch = window.fetch;
+
+    // Override fetch function
+    window.fetch = function() {
+        var args = [].slice.call(arguments);
+        var url = args[0];
+        var options = args[1] || {};
+
+        // Check if the request URL matches the target origin
+        if (/^https?:\/\/([^\/]+)/i.test(url)) {
+            // Modify the URL to go through the CORS proxy if it's not from the same origin or the CORS proxy itself
+            if (RegExp.$1.toLowerCase() !== window.location.host.split(':')[0] && RegExp.$1 !== cors_api_host) {
+                args[0] = cors_api_url + url;
+                // Ensure CORS headers are added
+                options.mode = 'cors';
+                options.headers = options.headers || {};
+                options.headers['X-Requested-With'] = 'fetch';
+                options.headers['Origin'] = window.location.origin; 
+                options.headers['User-Agent'] = navigator.userAgent; // Add any other headers as needed
+            }
+        }
+
+        // Call the original fetch function with modified arguments
+        return originalFetch.apply(this, args);
+    };
+})();
 
 document.addEventListener('DOMContentLoaded', function() {
     const searchButton = document.getElementById('search-button');
