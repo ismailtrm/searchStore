@@ -18,6 +18,7 @@ fetch(url, {
         'sec-ch-ua-mobile': '?0',
         'sec-ch-ua-platform': `${navigator.userAgentData.getHighEntropyValues(['sec-ch-ua-platform'])}`
     },
+    mode: 'no-cors'
 })
 .then(response => {
     if (!response.ok) {
@@ -31,7 +32,7 @@ fetch(url, {
     // Parse the HTML string into a document
     html = html.replace('GET https://cors-anywhere.herokuapp.com/corsdemo', '');
     html = html.replace('403 Forbidden', '');
-
+    console.log(`${html}`)
     const doc = parser.parseFromString(html, 'text/html');
     // Find the hidden input element
     const hiddenInput = doc.querySelector('input[name="accessRequest"]');
