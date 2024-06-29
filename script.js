@@ -1,72 +1,4 @@
-const getUAData = async () => {
-    let uaData = {};
-    if (navigator.userAgentData) {
-        uaData = await navigator.userAgentData.getHighEntropyValues(['sec-ch-ua', 'sec-ch-ua-platform']);
-    }
-    return uaData;
-};
 
-const fetchCorsDemo = async () => {
-    const uaData = await getUAData();
-
-    const url = `https://cors-anywhere.herokuapp.com/corsdemo`;
-
-    try {
-        const response = await fetch(url, {
-            headers: {
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-                'Accept-Encoding': 'gzip, deflate, br, zstd',
-                'Accept-Language': 'tr-TR,tr;q=0.9,en;q=0.8,en-US;q=0.7',
-                'Connection': 'keep-alive',
-                'User-Agent': navigator.userAgent,
-                'sec-ch-ua': uaData['sec-ch-ua'] || '',
-                'sec-ch-ua-mobile': '?0',
-                'sec-ch-ua-platform': uaData['sec-ch-ua-platform'] || '',
-                'Origin': 'https://search-store.vercel.app/', // Added Origin header
-                'x-requested-with': 'fetch' // Added x-requested-with header
-            },
-            mode: 'no-cors'
-        });
-
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
-
-        let html = await response.text();
-        html = html.replace('GET https://cors-anywhere.herokuapp.com/corsdemo', '');
-        html = html.replace('403 Forbidden', '');
-
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-
-        const hiddenInput = doc.querySelector('input[name="accessRequest"]');
-        if (hiddenInput) {
-            const hiddenValue = hiddenInput.value;
-
-            const sUrl = `https://cors-anywhere.herokuapp.com/corsdemo?accessRequest=${hiddenValue}`;
-            const secondResponse = await fetch(sUrl, {
-                headers: {
-                    'Origin': 'https://search-store.vercel.app/', // Added Origin header
-                    'x-requested-with': 'fetch' // Added x-requested-with header
-                },
-                mode: 'cors'
-            });
-
-            if (!secondResponse.ok) {
-                throw new Error('Network response was not ok ' + secondResponse.statusText);
-            }
-
-            const data = await secondResponse.text();
-            console.log('Response from second request:', data);
-        } else {
-            throw new Error('Hidden input not found');
-        }
-    } catch (error) {
-        console.error('Fetch error:', error);
-    }
-};
-
-fetchCorsDemo();
 
 var cors_api_url = 'https://cors-anywhere.herokuapp.com/';
 function doCORSRequest(options, printResult) {
@@ -93,42 +25,13 @@ function doCORSRequest(options, printResult) {
     });
   };
 })();
-console.log(output)
+
+console.log(`${output}`)
+
 if (typeof console === 'object') {
   console.log('// To test a local CORS Anywhere server, set cors_api_url. For example:');
   console.log('cors_api_url = "http://localhost:8080/"');
 }
-(function() {
-    var cors_api_host = 'cors-anywhere.herokuapp.com';
-    var cors_api_url = 'https://' + cors_api_host + '/';
-
-    // Original fetch function reference
-    var originalFetch = window.fetch;
-
-    // Override fetch function
-    window.fetch = function() {
-        var args = [].slice.call(arguments);
-        var url = args[0];
-        var options = args[1] || {};
-
-        // Check if the request URL matches the target origin
-        if (/^https?:\/\/([^\/]+)/i.test(url)) {
-            // Modify the URL to go through the CORS proxy if it's not from the same origin or the CORS proxy itself
-            if (RegExp.$1.toLowerCase() !== window.location.host.split(':')[0] && RegExp.$1 !== cors_api_host) {
-                args[0] = cors_api_url + url;
-                // Ensure CORS headers are added
-                options.mode = 'cors';
-                options.headers = options.headers || {};
-                options.headers['X-Requested-With'] = 'fetch';
-                options.headers['Origin'] = window.location.origin; 
-                options.headers['User-Agent'] = navigator.userAgent; // Add any other headers as needed
-            }
-        }
-
-        // Call the original fetch function with modified arguments
-        return originalFetch.apply(this, args);
-    };
-})();
 
 document.addEventListener('DOMContentLoaded', function() {
     const searchButton = document.getElementById('search-button');
