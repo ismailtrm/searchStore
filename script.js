@@ -19,7 +19,7 @@ function doCORSRequest(options, printResult) {
         method: 'GET',
         url: urlField,
       }, function printResult(result) {
-        console.log(result);
+        console.log(`${result}`);
       });
     };
   })();
