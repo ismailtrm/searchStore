@@ -52,7 +52,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         fetch(url, {
             headers: {
-                'method': 'GET',
                 'Origin': 'https://search-store.vercel.app/'
             }
         })
@@ -77,42 +76,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     const productUrl = `${siteUrl}${product.url}`;
                     const imgSrcUrl = 'https://cdn.dsmcdn.com';
 
-                    const productElement = document.createElement('div');
-                    productElement.classList.add('product');
-
-                    const sliderImages = product.images.map((image, i) => `
-                        <img src="${imgSrcUrl}${image}" alt="${product.imageAlt}_${i}">
-                    `).join('');
-
-                    productElement.innerHTML = `
-                        <div id="image-slider-trendyol-${index}" class="image-slider">
-                            ${sliderImages}
-                        </div>
-                        <a href="${productUrl}" target="_blank">${product.name}</a>
-                        <p>Price: ${product.price.sellingPrice}</p>
-                    `;
-
+                    const productElement = createProductElement(product, imgSrcUrl, productUrl);
                     resultsSection.appendChild(productElement);
 
-                    const images = productElement.querySelectorAll(`#image-slider-trendyol-${index} img`);
-                    let currentIndex = 0;
-
-                    function showSlide(index) {
-                        images.forEach((img, i) => {
-                            img.classList.remove('active');
-                            if (i === index) {
-                                img.classList.add('active');
-                            }
-                        });
-                    }
-
-                    function nextSlide() {
-                        currentIndex = (currentIndex + 1) % images.length;
-                        showSlide(currentIndex);
-                    }
-
-                    showSlide(currentIndex);
-                    setInterval(nextSlide, 3000);
+                    setupImageSlider(`image-slider-trendyol-${index}`, productElement);
                 });
             } else {
                 resultsSection.innerHTML = '<p>Belirtilen <script> içeriği bulunamadı.</p>';
@@ -124,25 +91,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    
-
     function fetchBershkaData(query) {
         const url = `https://www.bershka.com/tr/q/${encodeURIComponent(query)}`;
-        var userAgent = navigator.userAgent;
-
-        var x = new fetch();
-        x.open('GET', `${url}`);
-// I put "XMLHttpRequest" here, but you can use anything you want.
-        x.setRequestHeader('X-Requested-With', 'fetch');
-        x.onload = function() {
-        alert(x.responseText);
-        };
-        x.send();
-
+        
         fetch(url, {
             headers: {
-                'Origin': 'https://search-store.vercel.app/',
-                'User-Agent': `${userAgent}`
+                'Origin': 'https://search-store.vercel.app/'
             }
         })
         .then(response => {
@@ -152,7 +106,6 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.text();
         })
         .then(html => {
-            console.log(`${html}`)
             const scriptRegex = /<script type="application\/javascript">([\s\S]*?)<\/script>/;
             const match = html.match(scriptRegex);
             
@@ -163,46 +116,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 const data = JSON.parse(jsonString);
                 
                 data.products.forEach((product, index) => {
-                    const siteUrl = 'https://www.trendyol.com';
+                    const siteUrl = 'https://www.bershka.com';
                     const productUrl = `${siteUrl}${product.url}`;
                     const imgSrcUrl = 'https://cdn.dsmcdn.com';
 
-                    const productElement = document.createElement('div');
-                    productElement.classList.add('product');
-
-                    const sliderImages = product.images.map((image, i) => `
-                        <img src="${imgSrcUrl}${image}" alt="${product.imageAlt}_${i}">
-                    `).join('');
-
-                    productElement.innerHTML = `
-                        <div id="image-slider-trendyol-${index}" class="image-slider">
-                            ${sliderImages}
-                        </div>
-                        <a href="${productUrl}" target="_blank">${product.name}</a>
-                        <p>Price: ${product.price.sellingPrice}</p>
-                    `;
-
+                    const productElement = createProductElement(product, imgSrcUrl, productUrl);
                     resultsSection.appendChild(productElement);
 
-                    const images = productElement.querySelectorAll(`#image-slider-trendyol-${index} img`);
-                    let currentIndex = 0;
-
-                    function showSlide(index) {
-                        images.forEach((img, i) => {
-                            img.classList.remove('active');
-                            if (i === index) {
-                                img.classList.add('active');
-                            }
-                        });
-                    }
-
-                    function nextSlide() {
-                        currentIndex = (currentIndex + 1) % images.length;
-                        showSlide(currentIndex);
-                    }
-
-                    showSlide(currentIndex);
-                    setInterval(nextSlide, 3000);
+                    setupImageSlider(`image-slider-bershka-${index}`, productElement);
                 });
             } else {
                 resultsSection.innerHTML = '<p>Belirtilen <script> içeriği bulunamadı.</p>';
@@ -212,5 +133,46 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('There was a problem with the fetch operation:', error);
             resultsSection.innerHTML = '<p>An error occurred while fetching data. Please try again later.</p>';
         });
+    }
+
+    function createProductElement(product, imgSrcUrl, productUrl) {
+        const productElement = document.createElement('div');
+        productElement.classList.add('product');
+
+        const sliderImages = product.images.map((image, i) => `
+            <img src="${imgSrcUrl}${image}" alt="${product.imageAlt}_${i}">
+        `).join('');
+
+        productElement.innerHTML = `
+            <div class="image-slider">
+                ${sliderImages}
+            </div>
+            <a href="${productUrl}" target="_blank">${product.name}</a>
+            <p>Price: ${product.price.sellingPrice}</p>
+        `;
+
+        return productElement;
+    }
+
+    function setupImageSlider(sliderId, productElement) {
+        const images = productElement.querySelector(`.${sliderId} img`);
+        let currentIndex = 0;
+
+        function showSlide(index) {
+            images.forEach((img, i) => {
+                img.classList.remove('active');
+                if (i === index) {
+                    img.classList.add('active');
+                }
+            });
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % images.length;
+            showSlide(currentIndex);
+        }
+
+        showSlide(currentIndex);
+        setInterval(nextSlide, 3000);
     }
 });
