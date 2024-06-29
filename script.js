@@ -24,11 +24,6 @@ function doCORSRequest(options, printResult) {
 
   console.log(printer); // İsteğin sonucunu burada konsola yazdırabilirsiniz.
 
-  if (typeof console === 'object') {
-    console.log('// To test a local CORS Anywhere server, set cors_api_url. For example:');
-    console.log('cors_api_url = "http://localhost:8080/"');
-  }
-
 document.addEventListener('DOMContentLoaded', function () {
   const searchButton = document.getElementById('search-button');
   const searchQuery = document.getElementById('search-query');
