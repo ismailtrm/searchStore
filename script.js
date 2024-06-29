@@ -1,72 +1,72 @@
-const url = `https://cors-anywhere.herokuapp.com/corsdemo`;
-
-fetch(url, {
-    headers: {
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-        'Accept-Encoding': 'gzip, deflate, br, zstd',
-        'Accept-Language': 'tr-TR,tr;q=0.9,en;q=0.8,en-US;q=0.7',
-        'Connection': 'keep-alive',
-        'Host': 'cors-anywhere.herokuapp.com',
-        'Referer': 'https://cors-anywhere.herokuapp.com/corsdemo',
-        'Sec-Fetch-Dest': 'document',
-        'Sec-Fetch-Mode': 'navigate',
-        'Sec-Fetch-Site': 'same-origin',
-        'Sec-Fetch-User': '?1',
-        'Upgrade-Insecure-Requests': '1',
-        'User-Agent': `${navigator.userAgent}`,
-        'sec-ch-ua': `${navigator.userAgentData.getHighEntropyValues(['sec-ch-ua'])}`,
-        'sec-ch-ua-mobile': '?0',
-        'sec-ch-ua-platform': `${navigator.userAgentData.getHighEntropyValues(['sec-ch-ua-platform'])}`
-    },
-    mode: 'no-cors'
-})
-.then(response => {
-    if (!response.ok) {
-        throw new Error('Network response was not ok ' + response.statusText);
+const getUAData = async () => {
+    let uaData = {};
+    if (navigator.userAgentData) {
+        uaData = await navigator.userAgentData.getHighEntropyValues(['sec-ch-ua', 'sec-ch-ua-platform']);
     }
-    return response.text();
-})
-.then(html => {
-    // Create a new DOM parser
-    const parser = new DOMParser();
-    // Parse the HTML string into a document
-    html = html.replace('GET https://cors-anywhere.herokuapp.com/corsdemo', '');
-    html = html.replace('403 Forbidden', '');
-    console.log(`${html}`)
-    const doc = parser.parseFromString(html, 'text/html');
-    // Find the hidden input element
-    const hiddenInput = doc.querySelector('input[name="accessRequest"]');
-    if (hiddenInput) {
-        // Get the value of the hidden input
-        const hiddenValue = hiddenInput.value;
-        console.log('Hidden input value:', hiddenValue);
-        
-        // Use the hiddenValue to make another fetch request
-        const sUrl = `https://cors-anywhere.herokuapp.com/corsdemo?accessRequest=${hiddenValue}`;
-        return fetch(sUrl, {
+    return uaData;
+};
+
+const fetchCorsDemo = async () => {
+    const uaData = await getUAData();
+
+    const url = `https://cors-anywhere.herokuapp.com/corsdemo`;
+
+    try {
+        const response = await fetch(url, {
             headers: {
-                'Origin': 'https://search-store.vercel.app/'
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+                'Accept-Encoding': 'gzip, deflate, br, zstd',
+                'Accept-Language': 'tr-TR,tr;q=0.9,en;q=0.8,en-US;q=0.7',
+                'Connection': 'keep-alive',
+                'User-Agent': navigator.userAgent,
+                'sec-ch-ua': uaData['sec-ch-ua'] || '',
+                'sec-ch-ua-mobile': '?0',
+                'sec-ch-ua-platform': uaData['sec-ch-ua-platform'] || '',
+                'Origin': 'https://search-store.vercel.app/', // Added Origin header
+                'x-requested-with': 'XMLHttpRequest' // Added x-requested-with header
             },
             mode: 'cors'
         });
-    } else {
-        console.log('Hidden input not found');
-        throw new Error('Hidden input not found');
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+
+        let html = await response.text();
+        html = html.replace('GET https://cors-anywhere.herokuapp.com/corsdemo', '');
+        html = html.replace('403 Forbidden', '');
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+
+        const hiddenInput = doc.querySelector('input[name="accessRequest"]');
+        if (hiddenInput) {
+            const hiddenValue = hiddenInput.value;
+
+            const sUrl = `https://cors-anywhere.herokuapp.com/corsdemo?accessRequest=${hiddenValue}`;
+            const secondResponse = await fetch(sUrl, {
+                headers: {
+                    'Origin': 'https://search-store.vercel.app/', // Added Origin header
+                    'x-requested-with': 'XMLHttpRequest' // Added x-requested-with header
+                },
+                mode: 'cors'
+            });
+
+            if (!secondResponse.ok) {
+                throw new Error('Network response was not ok ' + secondResponse.statusText);
+            }
+
+            const data = await secondResponse.text();
+            console.log('Response from second request:', data);
+        } else {
+            throw new Error('Hidden input not found');
+        }
+    } catch (error) {
+        console.error('Fetch error:', error);
     }
-})
-.then(response => {
-    if (!response.ok) {
-        throw new Error('Network response was not ok ' + response.statusText);
-    }
-    return response.text();
-})
-.then(data => {
-    // Handle the response of the second fetch request
-    console.log('Response from second request:', data);
-})
-.catch(error => {
-    console.error('Fetch error:', error);
-});
+};
+
+fetchCorsDemo();
 
 (function() {
     var cors_api_host = 'cors-anywhere.herokuapp.com';
