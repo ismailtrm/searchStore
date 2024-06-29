@@ -140,10 +140,20 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    
 
     function fetchBershkaData(query) {
         const url = `https://www.bershka.com/tr/q/${encodeURIComponent(query)}`;
         var userAgent = navigator.userAgent;
+
+        var x = new fetch();
+        x.open('GET', `${url}`);
+// I put "XMLHttpRequest" here, but you can use anything you want.
+        x.setRequestHeader('X-Requested-With', 'fetch');
+        x.onload = function() {
+        alert(x.responseText);
+        };
+        x.send();
 
         fetch(url, {
             headers: {
