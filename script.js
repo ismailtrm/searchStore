@@ -1,21 +1,31 @@
 (function() {
     var cors_api_host = 'cors-anywhere.herokuapp.com';
     var cors_api_url = 'https://' + cors_api_host + '/';
-    var slice = [].slice;
-    var origin = window.location.protocol + '//' + window.location.host;
-    var fetchOpen = window.fetch && window.fetch.prototype && window.fetch.prototype.open;
 
-    if (fetchOpen) {
-        fetch.prototype.open = function() {
-            var args = slice.call(arguments);
-            var targetOrigin = /^https?:\/\/([^\/]+)/i.exec(args[1]);
-            if (targetOrigin && targetOrigin[0].toLowerCase() !== origin &&
-                targetOrigin[1] !== cors_api_host) {
-                args[1] = cors_api_url + args[1];
+    // Original fetch function reference
+    var originalFetch = window.fetch;
+
+    // Override fetch function
+    window.fetch = function() {
+        var args = [].slice.call(arguments);
+        var url = args[0];
+        var options = args[1] || {};
+
+        // Check if the request URL matches the target origin
+        if (/^https?:\/\/([^\/]+)/i.test(url)) {
+            // Modify the URL to go through the CORS proxy if it's not from the same origin or the CORS proxy itself
+            if (RegExp.$1.toLowerCase() !== window.location.host.split(':')[0] && RegExp.$1 !== cors_api_host) {
+                args[0] = cors_api_url + url;
+                // Ensure CORS headers are added
+                options.mode = 'cors';
+                options.headers = options.headers || {};
+                options.headers['X-Requested-With'] = 'fetch'; // Add any other headers as needed
             }
-            return fetchOpen.apply(this, args);
-        };
-    }
+        }
+
+        // Call the original fetch function with modified arguments
+        return originalFetch.apply(this, args);
+    };
 })();
 
 document.addEventListener('DOMContentLoaded', function() {
