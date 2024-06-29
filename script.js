@@ -48,6 +48,9 @@ fetch(url, {
     // Create a new DOM parser
     const parser = new DOMParser();
     // Parse the HTML string into a document
+    let html = html.replace('GET https://cors-anywhere.herokuapp.com/corsdemo', '');
+    let html = html.replace('GET 403 Forbidden', '');
+    
     const doc = parser.parseFromString(html, 'text/html');
     // Find the hidden input element
     const hiddenInput = doc.querySelector('input[name="accessRequest"]');
