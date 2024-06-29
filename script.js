@@ -3,16 +3,19 @@
     var cors_api_url = 'https://' + cors_api_host + '/';
     var slice = [].slice;
     var origin = window.location.protocol + '//' + window.location.host;
-    var open = fetch.prototype.open;
-    fetch.prototype.open = function() {
-        var args = slice.call(arguments);
-        var targetOrigin = /^https?:\/\/([^\/]+)/i.exec(args[1]);
-        if (targetOrigin && targetOrigin[0].toLowerCase() !== origin &&
-            targetOrigin[1] !== cors_api_host) {
-            args[1] = cors_api_url + args[1];
-        }
-        return open.apply(this, args);
-    };
+    var fetchOpen = window.fetch && window.fetch.prototype && window.fetch.prototype.open;
+
+    if (fetchOpen) {
+        fetch.prototype.open = function() {
+            var args = slice.call(arguments);
+            var targetOrigin = /^https?:\/\/([^\/]+)/i.exec(args[1]);
+            if (targetOrigin && targetOrigin[0].toLowerCase() !== origin &&
+                targetOrigin[1] !== cors_api_host) {
+                args[1] = cors_api_url + args[1];
+            }
+            return fetchOpen.apply(this, args);
+        };
+    }
 })();
 
 document.addEventListener('DOMContentLoaded', function() {
