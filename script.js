@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  const targetUrl = `https://www.trendyol.com/sr?q=${encodeURIComponent(query)}`
+  const targetUrl = `https://www.trendyol.com/sr?q=${encodeURIComponent(query)}`;
   function fetchTrendyolData(targetUrl) {
     const url = `${cors_api_url}${targetUrl}`;
 
