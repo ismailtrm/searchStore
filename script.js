@@ -23,9 +23,9 @@ const fetchCorsDemo = async () => {
                 'sec-ch-ua-mobile': '?0',
                 'sec-ch-ua-platform': uaData['sec-ch-ua-platform'] || '',
                 'Origin': 'https://search-store.vercel.app/', // Added Origin header
-                'x-requested-with': 'XMLHttpRequest' // Added x-requested-with header
+                'x-requested-with': 'fetch' // Added x-requested-with header
             },
-            mode: 'cors'
+            mode: 'no-cors'
         });
 
         if (!response.ok) {
@@ -47,7 +47,7 @@ const fetchCorsDemo = async () => {
             const secondResponse = await fetch(sUrl, {
                 headers: {
                     'Origin': 'https://search-store.vercel.app/', // Added Origin header
-                    'x-requested-with': 'XMLHttpRequest' // Added x-requested-with header
+                    'x-requested-with': 'fetch' // Added x-requested-with header
                 },
                 mode: 'cors'
             });
