@@ -29,17 +29,9 @@ main {
 }
 
 .column-container {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: auto auto auto;
     gap: 20px;
-}
-
-.single-column .product {
-    flex: 1 1 100%;
-}
-
-.double-column .product {
-    flex: 1 1 calc(50% - 20px);
 }
 
 .product {
