@@ -16,9 +16,11 @@ function doCORSRequest(options, printResult) {
         method: 'GET',
         url: 'https://cors-anywhere.herokuapp.com/corsdemo',
     }, function printResult(result) {
-        console.log(result);
+        var printer = result;
     });
 };
+
+console.log(printer)
 
   if (typeof console === 'object') {
     console.log('// To test a local CORS Anywhere server, set cors_api_url. For example:');
