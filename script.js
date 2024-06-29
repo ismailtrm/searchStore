@@ -1,36 +1,3 @@
-        (function() {
-            var cors_api_host = 'cors-anywhere.herokuapp.com';
-            var cors_api_url = 'https://' + cors_api_host + '/';
-            var origin = window.location.protocol + '//' + window.location.host;
-
-            // Save the original fetch function
-            var originalFetch = fetch;
-
-            // Override the fetch function
-            window.fetch = function() {
-                var args = Array.from(arguments);
-                var input = args[0];
-                var init = args[1] || {};
-
-                // If input is a Request object, extract the URL
-                var url = (input instanceof Request) ? input.url : input;
-
-                var targetOrigin = /^https?:\/\/([^\/]+)/i.exec(url);
-
-                if (targetOrigin && targetOrigin[0].toLowerCase() !== origin &&
-                    targetOrigin[1] !== cors_api_host) {
-                    // Prepend the CORS proxy URL
-                    if (input instanceof Request) {
-                        input = new Request(cors_api_url + url, input);
-                    } else {
-                        args[0] = cors_api_url + url;
-                    }
-                }
-
-                return originalFetch.apply(this, args);
-            };
-        })();
-
 document.addEventListener('DOMContentLoaded', function() {
     const searchButton = document.getElementById('search-button');
     const searchQuery = document.getElementById('search-query');
