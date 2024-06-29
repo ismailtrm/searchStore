@@ -11,16 +11,17 @@ function doCORSRequest(options, printResult) {
     };
 }
   // Bind event
-  window.onload = function() {
-    doCORSRequest({
-        method: 'GET',
-        url: 'https://cors-anywhere.herokuapp.com/corsdemo',
-    }, function printResult(result) {
-        var printer = result;
-    });
-};
+  var printer; // Global kapsamda printer değişkeni tanımlanıyor.
 
-console.log(printer)
+  window.onload = function() {
+      doCORSRequest({
+          method: 'GET',
+          url: 'https://cors-anywhere.herokuapp.com/corsdemo',
+      }, function printResult(result) {
+          printer = result; // printer değişkeni printResult içinde atanıyor.
+          console.log(printer); // İsteğin sonucunu burada konsola yazdırabilirsiniz.
+      });
+  };
 
   if (typeof console === 'object') {
     console.log('// To test a local CORS Anywhere server, set cors_api_url. For example:');
