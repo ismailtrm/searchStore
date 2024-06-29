@@ -2,7 +2,21 @@ const url = `https://cors-anywhere.herokuapp.com/corsdemo`;
 
 fetch(url, {
     headers: {
-        'Origin': 'https://search-store.vercel.app/'
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+        'Accept-Encoding': 'gzip, deflate, br, zstd',
+        'Accept-Language': 'tr-TR,tr;q=0.9,en;q=0.8,en-US;q=0.7',
+        'Connection': 'keep-alive',
+        'Host': 'cors-anywhere.herokuapp.com',
+        'Referer': 'https://cors-anywhere.herokuapp.com/corsdemo',
+        'Sec-Fetch-Dest': 'document',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-Site': 'same-origin',
+        'Sec-Fetch-User': '?1',
+        'Upgrade-Insecure-Requests': '1',
+        'User-Agent': `${navigator.userAgent}`,
+        'sec-ch-ua': `${navigator.userAgentData.getHighEntropyValues(['sec-ch-ua'])}`,
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': `${navigator.userAgentData.getHighEntropyValues(['sec-ch-ua-platform'])}`
     },
     mode: 'cors'
 })
