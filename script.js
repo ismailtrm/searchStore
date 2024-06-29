@@ -1,28 +1,31 @@
 var cors_api_url = 'https://cors-anywhere.herokuapp.com/';
-function doCORSRequest(options, printResult) {
-    var x = new XMLHttpRequest();
-    x.open(options.method, cors_api_url + options.url);
-    x.onload = x.onerror = function() {
-      printResult(
-        options.method + ' ' + options.url + '\n' +
-        x.status + ' ' + x.statusText + '\n\n' +
-        (x.responseText || '')
-      );
-    };
-}
-  // Bind event
-  var printer; // Global kapsamda printer değişkeni tanımlanıyor.
-
+function doCORSRequest(options) {
+    return new Promise((resolve, reject) => {
+      var x = new XMLHttpRequest();
+      x.open(options.method, cors_api_url + options.url);
+      x.onload = function() {
+        resolve(x.responseText);
+      };
+      x.onerror = function() {
+        reject(new Error(x.statusText));
+      };
+      x.send();
+    });
+  }
+  
   window.onload = function() {
-      doCORSRequest({
-          method: 'GET',
-          url: 'https://cors-anywhere.herokuapp.com/corsdemo',
-      }, function printResult(result) {
-          printer = result; // printer değişkeni printResult içinde atanıyor.
-      });
+    doCORSRequest({
+      method: 'GET',
+      url: 'https://cors-anywhere.herokuapp.com/corsdemo',
+    })
+    .then(result => {
+      printer = result;
+      console.log(printer); 
+    })
+    .catch(error => {
+      console.error("Hata:", error);
+    });
   };
-
-  console.log(printer); // İsteğin sonucunu burada konsola yazdırabilirsiniz.
 
 document.addEventListener('DOMContentLoaded', function () {
   const searchButton = document.getElementById('search-button');
