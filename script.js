@@ -56,7 +56,8 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(url, {
             headers: {
                 'Origin': 'https://search-store.vercel.app/'
-            }
+            },
+            mode: 'no-cors' 
         })
         .then(response => {
             if (!response.ok) {
@@ -100,7 +101,8 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(url, {
             headers: {
                 'Origin': 'https://search-store.vercel.app/'
-            }
+            },
+            mode: 'no-cors' 
         })
         .then(response => {
             if (!response.ok) {
@@ -147,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
         `).join('');
 
         productElement.innerHTML = `
-            <div class="image-slider">
+            <div class="image-slider" id="image-slider">
                 ${sliderImages}
             </div>
             <a href="${productUrl}" target="_blank">${product.name}</a>
@@ -158,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function setupImageSlider(sliderId, productElement) {
-        const images = productElement.querySelector(`.${sliderId} img`);
+        const images = productElement.querySelectorAll(`#${sliderId} img`);
         let currentIndex = 0;
 
         function showSlide(index) {
