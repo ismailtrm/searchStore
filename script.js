@@ -68,6 +68,36 @@ const fetchCorsDemo = async () => {
 
 fetchCorsDemo();
 
+var cors_api_url = 'https://cors-anywhere.herokuapp.com/';
+function doCORSRequest(options, printResult) {
+  var x = new XMLHttpRequest();
+  x.open(options.method, cors_api_url + options.url);
+  x.onload = x.onerror = function() {
+    printResult(
+      options.method + ' ' + options.url + '\n' +
+      x.status + ' ' + x.statusText + '\n\n' +
+      (x.responseText || '')
+    );
+  };
+
+// Bind event
+(function() {
+  var urlField = 'https://cors-anywhere.herokuapp.com/corsdemo';
+  document.getElementById('search-button').onclick = function(e) {
+    e.preventDefault();
+    doCORSRequest({
+      method: 'GET',
+      url: urlField.value,
+    }, function printResult(result) {
+      const output = result;
+    });
+  };
+})();
+console.log(output)
+if (typeof console === 'object') {
+  console.log('// To test a local CORS Anywhere server, set cors_api_url. For example:');
+  console.log('cors_api_url = "http://localhost:8080/"');
+}
 (function() {
     var cors_api_host = 'cors-anywhere.herokuapp.com';
     var cors_api_url = 'https://' + cors_api_host + '/';
