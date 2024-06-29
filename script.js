@@ -19,7 +19,9 @@
                 // Ensure CORS headers are added
                 options.mode = 'cors';
                 options.headers = options.headers || {};
-                options.headers['X-Requested-With'] = 'fetch'; // Add any other headers as needed
+                options.headers['X-Requested-With'] = 'fetch';
+                options.headers['Origin'] = window.location.origin; 
+                options.headers['User-Agent'] = navigator.userAgent;// Add any other headers as needed
             }
         }
 
