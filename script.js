@@ -21,7 +21,7 @@
                 options.headers = options.headers || {};
                 options.headers['X-Requested-With'] = 'fetch';
                 options.headers['Origin'] = window.location.origin; 
-                options.headers['User-Agent'] = navigator.userAgent;// Add any other headers as needed
+                options.headers['User-Agent'] = navigator.userAgent; // Add any other headers as needed
             }
         }
 
@@ -39,10 +39,6 @@ document.addEventListener('DOMContentLoaded', function() {
         trendyol: {
             checkboxId: 'trendyol',
             fetchData: fetchTrendyolData
-        },
-        bershka: {
-            checkboxId: 'bershka',
-            fetchData: fetchBershkaData
         }
     };
 
@@ -52,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (query !== "" && selectedSources.length > 0) {
             resultsSection.innerHTML = ''; // Clear previous results
-            resultsSection.className = selectedSources.length === 2 ? 'column-container double-column' : 'column-container single-column';
+            resultsSection.className = 'column-container single-column';
 
             selectedSources.forEach(source => {
                 dataSources[source].fetchData(query);
@@ -104,51 +100,6 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error);
             resultsSection.innerHTML = '<p>An error occurred while fetching data from Trendyol. Please try again later.</p>';
-        });
-    }
-
-    function fetchBershkaData(query) {
-        const url = `https://www.bershka.com/tr/q/${encodeURIComponent(query)}`;
-        
-        fetch(url, {
-            headers: {
-                'Origin': 'https://search-store.vercel.app/'
-            },
-            mode: 'no-cors' 
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.text();
-        })
-        .then(html => {
-            const scriptRegex = /<script type="application\/javascript">([\s\S]*?)<\/script>/;
-            const match = html.match(scriptRegex);
-            
-            if (match && match[1]) {
-                let jsonString = match[1].replace('window.__SEARCH_APP_INITIAL_STATE__=', '');
-                jsonString = jsonString.replace(/;window\.slpName='';window\.TYPageName='product_search_result';window\.isSearchResult=true;window\.pageType="search";/, '');
-
-                const data = JSON.parse(jsonString);
-                
-                data.products.forEach((product, index) => {
-                    const siteUrl = 'https://www.bershka.com';
-                    const productUrl = `${siteUrl}${product.url}`;
-                    const imgSrcUrl = 'https://cdn.dsmcdn.com';
-
-                    const productElement = createProductElement(product, imgSrcUrl, productUrl);
-                    resultsSection.appendChild(productElement);
-
-                    setupImageSlider(`image-slider-bershka-${index}`, productElement);
-                });
-            } else {
-                resultsSection.innerHTML = '<p>Belirtilen <script> içeriği bulunamadı.</p>';
-            }
-        })
-        .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
-            resultsSection.innerHTML = '<p>An error occurred while fetching data. Please try again later.</p>';
         });
     }
 
