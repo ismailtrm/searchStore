@@ -36,7 +36,7 @@ fetch(url, {
     headers: {
         'Origin': 'https://search-store.vercel.app/'
     },
-    mode: 'no-cors'
+    mode: 'cors'
 })
 .then(response => {
     if (!response.ok) {
