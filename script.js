@@ -13,6 +13,8 @@ function doCORSRequest(options) {
     });
   }
   
+  const printer
+
   window.onload = function() {
     doCORSRequest({
       method: 'GET',
@@ -26,6 +28,15 @@ function doCORSRequest(options) {
       console.error("Hata:", error);
     });
   };
+
+  const parser = new DOMParser();
+  const htmlString = printer
+  const doc = parser.parseFromString(htmlString, 'text/html');
+
+  // Extract the value of the accessRequest parameter
+  const accessRequestValue = doc.querySelector('input[name="accessRequest"]').value;
+  console.log('Access Request Value:', accessRequestValue);
+
 
 document.addEventListener('DOMContentLoaded', function () {
   const searchButton = document.getElementById('search-button');
