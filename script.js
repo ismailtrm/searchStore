@@ -34,7 +34,7 @@ function doCORSRequest(options) {
   const doc = parser.parseFromString(htmlString, 'text/html');
 
   // Extract the value of the accessRequest parameter
-  const accessRequestValue = doc.querySelector('input[name="accessRequest"]').value;
+  const accessRequestValue = doc.querySelector('input[name="accessRequest"]');
   console.log('Access Request Value:', accessRequestValue);
 
 
