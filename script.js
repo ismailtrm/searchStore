@@ -13,7 +13,7 @@ function doCORSRequest(options) {
     });
   }
 
-  const printer = "";
+  let printer = " ";
 
   window.onload = function() {
     doCORSRequest({
