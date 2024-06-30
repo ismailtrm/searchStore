@@ -12,8 +12,8 @@ function doCORSRequest(options) {
       x.send();
     });
   }
-  
-  const printer
+
+  const printer = "";
 
   window.onload = function() {
     doCORSRequest({
