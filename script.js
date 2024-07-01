@@ -18,7 +18,7 @@ function doCORSRequest(options) {
 }
 
 const options = {
-  url: 'https://cors-anywhere.herokuapp.com/corsdemo?accessRequest=', // hedef URL
+  url: 'view-source:https://cors-anywhere.herokuapp.com/corsdemo', // hedef URL
   headers: {
     'Content-Type': 'application/json',
     // Diğer gerekli başlıklar
