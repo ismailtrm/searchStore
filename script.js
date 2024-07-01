@@ -1,41 +1,33 @@
-var cors_api_url = 'https://cors-anywhere.herokuapp.com/';
+const corsApiUrl = 'https://cors-anywhere.herokuapp.com/';
+
 function doCORSRequest(options) {
-    return new Promise((resolve, reject) => {
-      var x = new XMLHttpRequest();
-      x.open(options.method, cors_api_url + options.url);
-      x.onload = function() {
-        resolve(x.responseText);
-      };
-      x.onerror = function() {
-        reject(new Error(x.statusText));
-      };
-      x.send();
-    });
-  }
-
-  let printer = " ";
-
-  window.onload = function() {
-    doCORSRequest({
-      method: 'GET',
-      url: 'https://cors-anywhere.herokuapp.com/corsdemo',
+  return fetch(corsApiUrl + options.url, {
+    method: 'GET',
+    headers: options.headers,
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.text();
     })
-    .then(result => {
-      printer = result;
-      console.log(printer); 
-    })
+    .then(data => data)
     .catch(error => {
-      console.error("Hata:", error);
+      throw new Error(error.message);
     });
-  };
+}
 
-  const parser = new DOMParser();
-  const htmlString = printer
-  const doc = parser.parseFromString(htmlString, 'text/html');
+const options = {
+  url: 'https://cors-anywhere.herokuapp.com/corsdemo?accessRequest=', // hedef URL
+  headers: {
+    'Content-Type': 'application/json',
+    // Diğer gerekli başlıklar
+  },
+};
 
-  // Extract the value of the accessRequest parameter
-  const accessRequestValue = doc.querySelector('input[name="accessRequest"]');
-  console.log('Access Request Value:', accessRequestValue);
+doCORSRequest(options)
+  .then(response => console.log(response))
+  .catch(error => console.error('Error:', error));
 
 
 document.addEventListener('DOMContentLoaded', function () {
