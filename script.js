@@ -1,4 +1,4 @@
-const corsApiUrl = 'https://cors-anywhere.herokuapp.com/';
+const corsApiUrl = '';
 
 function doCORSRequest(options) {
   return fetch(corsApiUrl + options.url, {
