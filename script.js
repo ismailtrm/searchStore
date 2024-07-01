@@ -1,3 +1,14 @@
+const url = 'https://cors-anywhere.herokuapp.com/corsdemo';
+
+fetch(url)
+  .then(response => response.json())
+  .then(data => {
+    console.log(data); // Gelen veriyi işle
+  })
+  .catch(error => {
+    console.error('Hata:', error);
+  });
+
 const corsApiUrl = '';
 
 function doCORSRequest(options) {
