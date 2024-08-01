@@ -8,8 +8,7 @@ You can view a live demo of the application [here](https://search-store.vercel.a
 ## Features
 - Search for stores
 - Display store information
-- Scrape data from multiple websites
-- User-friendly interface
+- Scrape data from multiple websites without any client app or browser bot
 
 ## Technologies Used
 - JavaScript
@@ -22,11 +21,11 @@ I am currently using a temporary server through [CORS Anywhere](https://cors-any
 ## Project Purpose
 The goal of this project is to scrape data from various websites using vanilla JavaScript and display the information in a user-friendly manner.
 
-## Development Status
-The frontend is still a work in progress, and I am actively looking for contributors to help improve it. If you are interested in contributing, please reach out.
+## Scraping Method
+Unlike traditional scraping libraries that create a bot or client, this application performs scraping directly through `fetch` requests. This allows for dynamic interaction with source websites without the need for additional scraping tools.
 
-### Fetch Requests for Scraping
-The application makes use of `fetch` requests to scrape data. This approach allows for direct and dynamic interaction with the source websites to retrieve the necessary data.
+## Development Status
+The frontend is still a work in progress, and I am actively looking for contributors to help improve it. If you are interested in contributing, please [reach out](ismailtarim7@gmail.com).
 
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE.txt) file for details.
