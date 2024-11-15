@@ -9,7 +9,7 @@ fetch(url)
     console.error('Hata:', error);
   });
 
-const corsApiUrl = '';
+const corsApiUrl = 'https://cors-anywhere.herokuapp.com/corsdemo';
 
 function doCORSRequest(options) {
   return fetch(corsApiUrl + options.url, {
