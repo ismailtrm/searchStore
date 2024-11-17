@@ -1,50 +1,8 @@
-const url = 'https://cors-anywhere.herokuapp.com/corsdemo';
-
-fetch(url)
-  .then(response => response.json())
-  .then(data => {
-    console.log(data); // Gelen veriyi işle
-  })
-  .catch(error => {
-    console.error('Hata:', error);
-  });
-
-const corsApiUrl = 'https://cors-anywhere.herokuapp.com/corsdemo';
-
-function doCORSRequest(options) {
-  return fetch(corsApiUrl + options.url, {
-    method: 'GET',
-    headers: options.headers,
-  })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.text();
-    })
-    .then(data => data)
-    .catch(error => {
-      throw new Error(error.message);
-    });
-}
-
-const options = {
-  url: 'view-source:https://cors-anywhere.herokuapp.com/corsdemo', // hedef URL
-  headers: {
-    'Content-Type': 'application/json',
-    // Diğer gerekli başlıklar
-  },
-};
-
-doCORSRequest(options)
-  .then(response => console.log(response))
-  .catch(error => console.error('Error:', error));
-
-
 document.addEventListener('DOMContentLoaded', function () {
   const searchButton = document.getElementById('search-button');
   const searchQuery = document.getElementById('search-query');
   const resultsSection = document.getElementById('results');
+  const corsApiUrl = 'https://cors-anywhere.herokuapp.com/corsdemo';
 
   searchButton.addEventListener('click', function (e) {
     e.preventDefault();
@@ -59,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function fetchTrendyolData(query) {
     const targetUrl = `https://www.trendyol.com/sr?q=${encodeURIComponent(query)}`;
-    const url = `${cors_api_url}${targetUrl}`;
+    const url = `${corsApiUrl}/${targetUrl}`;
 
     fetch(url, {
       headers: {
