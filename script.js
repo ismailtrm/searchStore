@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const searchButton = document.getElementById('search-button');
   const searchQuery = document.getElementById('search-query');
   const resultsSection = document.getElementById('results');
-  const corsApiUrl = 'https://cors-anywhere.herokuapp.com/corsdemo';
+  const corsApiUrl = 'https://cors-anywhere.herokuapp.com/';
 
   searchButton.addEventListener('click', function (e) {
     e.preventDefault();
@@ -17,11 +17,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function fetchTrendyolData(query) {
     const targetUrl = `https://www.trendyol.com/sr?q=${encodeURIComponent(query)}`;
-    const url = `${corsApiUrl}/${targetUrl}`;
+    const url = `${corsApiUrl}${targetUrl}`;
 
     fetch(url, {
       headers: {
-        'Origin': 'https://search-store.vercel.app/'
+        'x-requested-with': 'XMLHttpRequest'
       },
       mode: 'cors'
     })
