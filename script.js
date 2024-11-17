@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     fetch(url, {
       headers: {
+        'Origin': window.location.origin,
         'x-requested-with': 'XMLHttpRequest'
       },
       mode: 'cors'
