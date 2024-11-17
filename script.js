@@ -33,12 +33,11 @@ document.addEventListener('DOMContentLoaded', function () {
         return response.text();
       })
       .then(html => {
-        const scriptRegex = /<script type="application\/javascript">([\s\S]*?)<\/script>/;
+        const scriptRegex = /<script type="application\/javascript">[\s\S]*?window\.__SEARCH_APP_INITIAL_STATE__=([\s\S]*?);\n/;
         const match = html.match(scriptRegex);
 
         if (match && match[1]) {
-          let jsonString = match[1].replace('window.__SEARCH_APP_INITIAL_STATE__=', '');
-          jsonString = jsonString.replace(/;window\.slpName='';window\.TYPageName='product_search_result';window\.isSearchResult=true;window\.pageType="search";/, '');
+          const jsonString = match[1];
 
           const data = JSON.parse(jsonString);
 
@@ -61,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
       })
       .catch(error => {
         console.error('There was a problem with the fetch operation:', error);
-        resultsSection.innerHTML = '<p>Trendyol\'dan veri alınırken bir hata oluştu. Lütfen daha sonra tekrar deneyin.</p>';
+        resultsSection.innerHTML = `<p>Trendyol'dan veri alınırken bir hata oluştu: ${error.message}. Lütfen daha sonra tekrar deneyin.</p>`;
       });
   }
 
