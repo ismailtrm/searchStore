@@ -16,53 +16,57 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   function fetchTrendyolData(query) {
-    const targetUrl = `https://www.trendyol.com/sr?q=${encodeURIComponent(query)}`;
-    const url = `${corsApiUrl}${targetUrl}`;
+  const targetUrl = `https://www.trendyol.com/sr?q=${encodeURIComponent(query)}`;
+  const url = `${corsApiUrl}${targetUrl}`;
 
-    fetch(url, {
-      headers: {
-        'Origin': window.location.origin,
-        'x-requested-with': 'XMLHttpRequest'
-      },
-      mode: 'cors'
+  fetch(url, {
+    headers: {
+      'Origin': window.location.origin,
+      'x-requested-with': 'XMLHttpRequest',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
+      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+      'Accept-Language': 'en-US,en;q=0.5',
+      'Accept-Encoding': 'gzip, deflate, br'
+    },
+    mode: 'cors'
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok ' + response.statusText);
+      }
+      return response.text();
     })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok ' + response.statusText);
-        }
-        return response.text();
-      })
-      .then(html => {
-        const scriptRegex = /<script type="application\/javascript">[\s\S]*?window\.__SEARCH_APP_INITIAL_STATE__=([\s\S]*?);\n/;
-        const match = html.match(scriptRegex);
+    .then(html => {
+      const scriptRegex = /<script type="application\/javascript">[\s\S]*?window\.__SEARCH_APP_INITIAL_STATE__=([\s\S]*?);\n/;
+      const match = html.match(scriptRegex);
 
-        if (match && match[1]) {
-          const jsonString = match[1];
+      if (match && match[1]) {
+        const jsonString = match[1];
 
-          const data = JSON.parse(jsonString);
+        const data = JSON.parse(jsonString);
 
-          resultsSection.innerHTML = ''; // Clear previous results
-          resultsSection.className = 'column-container single-column';
+        resultsSection.innerHTML = ''; // Clear previous results
+        resultsSection.className = 'column-container single-column';
 
-          data.products.forEach((product, index) => {
-            const siteUrl = 'https://www.trendyol.com';
-            const productUrl = `${siteUrl}${product.url}`;
-            const imgSrcUrl = 'https://cdn.dsmcdn.com';
+        data.products.forEach((product, index) => {
+          const siteUrl = 'https://www.trendyol.com';
+          const productUrl = `${siteUrl}${product.url}`;
+          const imgSrcUrl = 'https://cdn.dsmcdn.com';
 
-            const productElement = createProductElement(product, imgSrcUrl, productUrl);
-            resultsSection.appendChild(productElement);
+          const productElement = createProductElement(product, imgSrcUrl, productUrl);
+          resultsSection.appendChild(productElement);
 
-            setupImageSlider(`image-slider-trendyol-${index}`, productElement);
-          });
-        } else {
-          resultsSection.innerHTML = '<p>Belirtilen <script> içeriği bulunamadı.</p>';
-        }
-      })
-      .catch(error => {
-        console.error('There was a problem with the fetch operation:', error);
-        resultsSection.innerHTML = `<p>Trendyol'dan veri alınırken bir hata oluştu: ${error.message}. Lütfen daha sonra tekrar deneyin.</p>`;
-      });
-  }
+          setupImageSlider(`image-slider-trendyol-${index}`, productElement);
+        });
+      } else {
+        resultsSection.innerHTML = '<p>Belirtilen <script> içeriği bulunamadı.</p>';
+      }
+    })
+    .catch(error => {
+      console.error('There was a problem with the fetch operation:', error);
+      resultsSection.innerHTML = `<p>Trendyol'dan veri alınırken bir hata oluştu: ${error.message}. Lütfen daha sonra tekrar deneyin.</p>`;
+    });
+}
 
   function createProductElement(product, imgSrcUrl, productUrl) {
     const productElement = document.createElement('div');
